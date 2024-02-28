@@ -3,7 +3,7 @@
 namespace Chassis
 {
     Chassis::Chassis() {
-        can_itrf = std::make_unique<Hardware::Can_interface>();
+        can_itrf = std::make_shared<Hardware::Can_interface>();
         // 电机初始化
         motors.assign(4, { Config::M3508_SPEED_PID_CONFIG });
     }

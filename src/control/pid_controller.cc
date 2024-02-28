@@ -2,6 +2,10 @@
 
 namespace Pid
 {
+
+    Pid_ctrl::Pid_ctrl(const Pid_config &config) : Pid_config(config) {
+    }
+
     void Pid_ctrl::calc(fp32 ref, fp32 set) {
         error[2] = error[1];
         error[1] = error[0];
@@ -26,7 +30,11 @@ namespace Pid
         }
     }
 
-    Pid_ctrl::Pid_ctrl(const Pid_config &config) : Pid_config(config) {
+    void Pid_ctrl::clean() {
+        error[0] = error[1] = error[2] = 0;
+        Dbuf[0] = Dbuf[1] = Dbuf[2] = 0;
+        Pout = Iout = Dout = 0;
+        out = 0;
     }
 
     /** TODO :pub all these into constructor

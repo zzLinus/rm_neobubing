@@ -1,3 +1,4 @@
+#pragma once
 #include "pid_controller.hpp"
 #include "types.hpp"
 
@@ -9,20 +10,21 @@ namespace Config
 
     const typename Pid::Pid_config M3508_SPEED_PID_CONFIG{
         Pid::PID_MODE::PID_POSITION,  // PID_MODE
-        15000.0,                      // KP
+        15000.0f,                      // KP
         10.0f,                        // KI
         0.0f,                         // KD
         14000.0f,                     // MAX_OUT
         2000.0f,                      // MAX_IOUT
     };
 
-    // chassis follow angle PID
-    // 底盘旋转跟随PID
-    const fp32 CHASSIS_FOLLOW_GIMBAL_PID_KP = 20.0f;  // 原始40.0f
-    const fp32 CHASSIS_FOLLOW_GIMBAL_PID_KI = 0.0f;
-    const fp32 CHASSIS_FOLLOW_GIMBAL_PID_KD = 100.0f;  // 原始0.0f
-    const fp32 CHASSIS_FOLLOW_GIMBAL_PID_MAX_OUT = 6.0f;
-    const fp32 CHASSIS_FOLLOW_GIMBAL_PID_MAX_IOUT = 0.2f;
+    const typename Pid::Pid_config CHASSIS_FOLLOW_GIMBAL_PID_CONFIG{
+        Pid::PID_MODE::PID_POSITION,  // PID_MODE
+        20.0f,                      // KP
+        0.0f,                        // KI
+        100.0f,                         // KD
+        6.0f,                     // MAX_OUT
+        0.2f,                      // MAX_IOUT
+    };
 
     // NOTE: chassis
     // chassis no follow angle PID

@@ -35,6 +35,7 @@ namespace Pid
         ~Pid_ctrl() = default;
 
         void calc(fp32 ref, fp32 set);
+        void clean();
 
        private:
        public:

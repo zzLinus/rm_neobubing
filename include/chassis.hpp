@@ -28,6 +28,11 @@ namespace Chassis
         // chassis set horizontal speed,positive means left,unit m/s.底盘设定速度 左右方向
         // 左为正，单位 m/s
         fp32 wz_set = 0.f;
+
+        bool no_force = true;
+
+        std::shared_ptr<Hardware::Can_interface> can_itrf;
+       private:
         // chassis set rotation speed,positive means counterclockwise,unit
         // rad/s.底盘设定旋转角速度，逆时针为正 单位 rad/s
         fp32 vx = 0.f;
@@ -40,10 +45,7 @@ namespace Chassis
 
         fp32 max_wheel_speed = 2.5f;
 
-        bool no_force = true;
-
         std::vector<Hardware::Motor> motors;
-        std::unique_ptr<Hardware::Can_interface> can_itrf;
         Types::debug_info_t *debugInfo;
     };
 }  // namespace Chassis
