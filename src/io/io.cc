@@ -1,4 +1,6 @@
 #include "io.hpp"
+#include <chrono>
+#include <thread>
 
 namespace Io
 {
@@ -15,6 +17,7 @@ namespace Io
 
     void Io_handler::task() {
         while (true) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(5));
             ui->render();
         }
     }

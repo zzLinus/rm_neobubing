@@ -3,6 +3,7 @@
 
 #include "pid_controller.hpp"
 #include "types.hpp"
+#include "string"
 
 namespace Hardware
 {

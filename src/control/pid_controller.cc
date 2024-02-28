@@ -12,15 +12,15 @@ namespace Pid
         error[0] = (set - ref);
         Dbuf[2] = Dbuf[1];
         Dbuf[1] = Dbuf[0];
-        if (mode == PID_POSITION) {
+        if (mode == Pid::PID_MODE::PID_POSITION) {
             Pout = kp * error[0];
             Iout += ki * error[0];
             Dbuf[0] = (error[0] - error[1]);
             Dout = kd * Dbuf[0];
             Iout = std::min(std::max(Iout, -max_iout), max_iout);
-            out = Pout + Iout + Dout;
+			out = Pout + Iout + Dout;
             out = std::min(std::max(out, -max_out), max_out);
-        } else if (mode == PID_DELTA) {
+        } else if (mode == Pid::PID_MODE::PID_DELTA) {
             Pout = kp * (error[0] - error[1]);
             Iout = ki * error[0];
             Dbuf[0] = (error[0] - 2.f * error[1] + error[2]);

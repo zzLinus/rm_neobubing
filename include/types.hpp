@@ -53,6 +53,10 @@ namespace Types
         can_frame can_f;
         uint64_t pkg;
         bool err;
+		std::string debuginfo1;
+		std::string debuginfo2;
+		std::string debuginfo3;
+
     } debug_info_t;
 
     typedef struct

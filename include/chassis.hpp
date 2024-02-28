@@ -6,6 +6,7 @@
 #include "can.hpp"
 #include "motor.hpp"
 #include "types.hpp"
+#include <vector>
 
 namespace Chassis
 {

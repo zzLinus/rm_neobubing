@@ -47,12 +47,20 @@ namespace Ui
             ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(1, 1, 0, 1));
             ImGui::Text("velocity : vx vy wz");
             ImGui::Text(" %f %f %f", debug->vx, debug->vy, debug->wz);
-            ImGui::SliderFloat("speed percent", &spdslider, 0.0f, Config::OPEN_LOOP_MAX_SPEED, "ratio = %.3f");
+            // ImGui::SliderFloat(
+            //     "speed percent",
+            //     &spdslider,
+            // Config::PIDCTRL_MAX_SPEED / 2,
+            // Config::PIDCTRL_MAX_SPEED,
+            //"ratio = %.3f");
             ImGui::TextColored(ImVec4(1, 1, 1, 1), "can pkg : %0lx", debug->pkg);
 
             ImGui::Text("time %lu %lu %lu", last, now, now - last);
 
             ImGui::Text("Hi mon! %d: ", debug->err);
+            ImGui::Text("PID %s: ", debug->debuginfo1.c_str());
+            ImGui::Text("PID %s: ", debug->debuginfo2.c_str());
+            ImGui::Text("PID %s: ", debug->debuginfo3.c_str());
             ImGui::Text(
                 "candump id :%x\n dlc : %d \n%02x %02x %02x %02x %02x %02x %02x %02x",
                 debug->can_f.can_id,
