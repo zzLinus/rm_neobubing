@@ -14,13 +14,13 @@ namespace Robot
         std::unique_ptr<std::thread> chassis_tread;
         std::unique_ptr<std::thread> chassis_can_tread;
        public:
-        Chassis::Chassis_ctrl chassis_ctrl;
 
         Robot_ctrl();
         ~Robot_ctrl() = default;
         std::shared_ptr<const Robot_set> get_robot_read() const;
         std::shared_ptr<Robot_set> get_robot_write();
         std::shared_ptr<Robot_set> robot_set;
+        Chassis::Chassis_ctrl chassis_ctrl;
         bool start();
        private:
     };

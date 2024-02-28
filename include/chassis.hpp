@@ -14,8 +14,10 @@ namespace Chassis
     {
        public:
         Chassis();
+        Chassis(const Chassis &c);
         ~Chassis() = default;
         void unpack(const can_frame &frame);
+        void update_speed();
         void init(Types::debug_info_t *debug);
         void decomposition_speed();
         void send_motor_current();

@@ -1,5 +1,7 @@
 #include "chassis.hpp"
 
+#include <iostream>
+
 namespace Chassis
 {
     Chassis::Chassis() {
@@ -23,12 +25,13 @@ namespace Chassis
     }
 
     void Chassis::control_loop() {
+        decomposition_speed();
+        update_speed();
         if (no_force) {
             for (auto &m : motors) {
                 m.give_current = 0;
             }
         } else {
-            decomposition_speed();
             fp32 max_speed = 0.f;
             for (int i = 0; i < 4; i++) {
                 motors[i].speed_set = wheel_speed[i];
@@ -53,7 +56,7 @@ namespace Chassis
         for (int i = 0; i < motors.size(); i++) {
             pkg = pkg | (((uint64_t)motors[i].give_current & 0xffff) << (16 * i));
         }
-        debugInfo->pkg = pkg;
+//        debugInfo->pkg = pkg;
         can_itrf->can_send(pkg);
     }
 
@@ -62,5 +65,11 @@ namespace Chassis
         wheel_speed[1] = -vx_set - vy_set + wz_set;
         wheel_speed[2] = -vx_set + vy_set + wz_set;
         wheel_speed[3] = vx_set + vy_set + wz_set;
+    }
+    void Chassis::update_speed() {
+        for(auto & m : motors) {
+            m.speed = Config::CHASSIS_MOTOR_RPM_TO_VECTOR_SEN * (fp32)m.motor_measure.speed_rpm;
+            m.accel = Config::CHASSIS_CONTROL_FREQUENCE * m.pid_ctrler.Dbuf[0];
+        }
     }
 }  // namespace Chassis

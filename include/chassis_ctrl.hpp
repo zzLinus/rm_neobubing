@@ -1,5 +1,7 @@
 #pragma once
 #include <cmath>
+#include <chrono>
+#include <thread>
 
 #include "chassis.hpp"
 #include "robot.hpp"
@@ -8,8 +10,8 @@ namespace Chassis
     class Chassis_ctrl
     {
        public:
-        Chassis_ctrl() = default;
-        explicit Chassis_ctrl(const std::shared_ptr<typename Robot::Robot_set> &robot);
+        Chassis_ctrl();
+        void init(const std::shared_ptr<typename Robot::Robot_set>&robot);
         void task();
 
        public:

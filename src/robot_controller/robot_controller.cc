@@ -3,9 +3,9 @@
 
 namespace Robot
 {
-    Robot_ctrl::Robot_ctrl() :
-          robot_set(std::make_shared<Robot::Robot_set>()),
-          chassis_ctrl(robot_set) {
+    Robot_ctrl::Robot_ctrl() {
+        robot_set = std::make_shared<Robot_set>();
+        chassis_ctrl.init(robot_set);
     }
 
     std::shared_ptr<const Robot_set> Robot_ctrl::get_robot_read() const {
@@ -24,7 +24,7 @@ namespace Robot
             );
         chassis_tread = std::make_unique<std::thread>(
             &Chassis::Chassis_ctrl::task,
-            chassis_ctrl
+            &chassis_ctrl
             );
         return true;
     }
