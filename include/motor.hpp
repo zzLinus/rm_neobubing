@@ -7,30 +7,31 @@
 namespace Hardware
 {
 
-    typedef struct
+    struct motor_can_message
     {
-        uint16_t ecd;
-        int16_t speed_rpm;
-        int16_t given_current;
-        uint8_t temperate;
-        int16_t last_ecd;
-    } motor_can_message;
-
+        uint16_t ecd = 0;
+        int16_t speed_rpm = 0;
+        int16_t given_current = 0;
+        uint8_t temperate = 0;
+        int16_t last_ecd = 0;
+    };
     class Motor
     {
        public:
-        Motor();
-        ~Motor();
+        Motor(const Pid::Pid_config &config);
+        ~Motor() = default;
 
        private:
        public:
-        Pid::Pid_ctrl *pid_ctrler;
+        Pid::Pid_ctrl pid_ctrler;
         // TODO: can bus api related
-        motor_can_message *motor_measure;
-        fp32 accel;
-        fp32 speed;
-        fp32 speed_set;
-        int16_t give_current;
+        motor_can_message motor_measure;
+
+        fp32 accel = 0.f;
+        fp32 speed = 0.f;
+        fp32 speed_set = 0.f;
+
+        int16_t give_current = 0;
 
        private:
     };

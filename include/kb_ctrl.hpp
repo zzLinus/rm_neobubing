@@ -5,11 +5,10 @@
 #include <cmath>
 
 #include "ramp_controller.hpp"
-#include "types.hpp"
+#include "config.hpp"
 
 namespace Input
 {
-
     class Kb_ctrl
     {
        public:

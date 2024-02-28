@@ -10,11 +10,11 @@
 #include <unistd.h>
 
 #include <cstdint>
+#include <cstdlib>
 #include <functional>
 
-#include "stdlib.h"
+#include "config.hpp"
 #include "string"
-#include "types.hpp"
 
 namespace Hardware
 {

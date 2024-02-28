@@ -2,26 +2,6 @@
 
 namespace Pid
 {
-
-    Pid_ctrl::Pid_ctrl(
-        uint8_t mode,
-        const fp32 kp,
-        const fp32 ki,
-        const fp32 kd,
-        const fp32 max_out,
-        const fp32 max_iout)
-        : mode(mode),
-          kp(kp),
-          ki(ki),
-          kd(kd),
-          max_out(max_out),
-          max_iout(max_iout) {
-        this->Dbuf[0] = this->Dbuf[1] = this->Dbuf[2] = 0.0f;
-        this->error[0] = this->error[1] = this->error[2] = this->Pout = this->Iout = this->Dout = this->out = 0.0f;
-    }
-
-    Pid_ctrl::~Pid_ctrl() {
-    }
     void Pid_ctrl::calc(fp32 ref, fp32 set) {
         error[2] = error[1];
         error[1] = error[0];
@@ -46,6 +26,9 @@ namespace Pid
         }
     }
 
+    Pid_ctrl::Pid_ctrl(const Pid_config &config) : Pid_config(config) {
+    }
+
     /** TODO :pub all these into constructor
      * @brief          pid struct data init
      * @param[out]     pid: PID struct data point
@@ -67,4 +50,12 @@ namespace Pid
      * @retval         none
      */
 
+    Pid_config::Pid_config(uint8_t mode, fp32 kp, fp32 ki, fp32 kd, fp32 max_out, fp32 max_iout)
+        : mode(mode),
+          kp(kp),
+          ki(ki),
+          kd(kd),
+          max_out(max_out),
+          max_iout(max_iout) {
+    }
 }  // namespace Pid

@@ -9,6 +9,7 @@ namespace Gimbal
        private:
        public:
         Gimbal_info();
+
         ~Gimbal_info();
 
         void task();
