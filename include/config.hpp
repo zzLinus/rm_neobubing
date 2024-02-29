@@ -9,7 +9,6 @@ namespace Config
     // NOTE: PID CONFIG
 
     const typename Pid::Pid_config M3508_SPEED_PID_CONFIG{
-        Pid::PID_MODE::PID_POSITION,  // PID_MODE
         15000.0f,                      // KP
         10.0f,                        // KI
         0.0f,                         // KD
@@ -17,8 +16,7 @@ namespace Config
         2000.0f,                      // MAX_IOUT
     };
 
-    const typename Pid::Pid_config CHASSIS_FOLLOW_GIMBAL_PID_CONFIG{
-        Pid::PID_MODE::PID_POSITION,  // PID_MODE
+    const typename Pid::Pid_config CHASSIS_FOLLOW_GIMBAL_PID_CONFIG {
         20.0f,                      // KP
         0.0f,                        // KI
         100.0f,                         // KD
@@ -26,16 +24,29 @@ namespace Config
         0.2f,                      // MAX_IOUT
     };
 
+    const typename Pid::Pid_config GIMBAL_YAW_ABSOLUTE_PID_CONFIG {
+        32.0f,                      // KP
+        0.0f,                        // KI
+        0.3f,                         // KD
+        10.0f,                     // MAX_OUT
+        0.0f,                      // MAX_IOUT
+    };
+
+    const typename Pid::Pid_config GIMBAL_PITCH_ABSOLUTE_PID_CONFIG {
+        15.0f,                      // KP
+        0.0f,                        // KI
+        0.0f,                         // KD
+        10.0f,                     // MAX_OUT
+        0.0f,                      // MAX_IOUT
+    };
+
+    constexpr fp32 CHASSIS_SPIN_SPEED = 7;
+
     // NOTE: chassis
     // chassis no follow angle PID
     // 底盘旋转不跟随PID
     // NOTE: const static fp32 chassis_no_follow_yaw_pid[3] = {4.5, 0.0002, 0}; ZHANG
     //       const static fp32 chassis_no_follow_yaw_pid[3] = {3.5, 0.0002, 0}; HUAN
-    const fp32 CHASSIS_NO_FOLLOW_GIMBAL_PID_KP = 4.5f;  // 原始40.0f
-    const fp32 CHASSIS_NO_FOLLOW_GIMBAL_PID_KI = 0.0002f;
-    const fp32 CHASSIS_NO_FOLLOW_GIMBAL_PID_KD = 0.0f;  // 原始0.0f
-    const fp32 CHASSIS_NO_FOLLOW_GIMBAL_PID_MAX_OUT = 6.0f;
-    const fp32 CHASSIS_NO_FOLLOW_GIMBAL_PID_MAX_IOUT = 0.2f;
 
     const fp32 CHASSIS_WZ_SPIN = 7;
 
@@ -55,13 +66,5 @@ namespace Config
     const fp32 CHASSIS_ACCEL_X_NUM = 0.1666666667f;
     const fp32 CHASSIS_ACCEL_Y_NUM = 0.3333333333f;
 
-    //
-    const fp32 RAMP_KEY_ADD_VX = 0.06f;
-    const fp32 RAMP_KEY_ADD_VY = 0.06f;
-    // 小陀螺缓启停的增量
-    // 小陀螺缓启停的增量
-    const fp32 RAMP_SPIN_INC = 0.06f;
-    const fp32 RAMP_SPIN_DEC = 0.06f;
 
-    const int32_t OPEN_LOOP_MAX_SPEED = 0x0aff;
 }  // namespace Config

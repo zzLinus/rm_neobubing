@@ -7,11 +7,10 @@ namespace Chassis
     Chassis::Chassis() {
         can_itrf = std::make_shared<Hardware::Can_interface>();
         // 电机初始化
-        motors.assign(4, { Config::M3508_SPEED_PID_CONFIG });
+        motors.assign(4, Hardware::Motor<Pid::Pid_position>{ Config::M3508_SPEED_PID_CONFIG });
     }
 
-    void Chassis::init(Types::debug_info_t *debug) {
-        debugInfo = debug;
+    void Chassis::init() {
         can_itrf->init([&](auto frame) { unpack(frame); });
     }
 
@@ -56,7 +55,6 @@ namespace Chassis
         for (int i = 0; i < motors.size(); i++) {
             pkg = pkg | (((uint64_t)motors[i].give_current & 0xffff) << (16 * i));
         }
-//        debugInfo->pkg = pkg;
         can_itrf->can_send(pkg);
     }
 
@@ -66,10 +64,11 @@ namespace Chassis
         wheel_speed[2] = -vx_set + vy_set + wz_set;
         wheel_speed[3] = vx_set + vy_set + wz_set;
     }
+
     void Chassis::update_speed() {
         for(auto & m : motors) {
             m.speed = Config::CHASSIS_MOTOR_RPM_TO_VECTOR_SEN * (fp32)m.motor_measure.speed_rpm;
-            m.accel = Config::CHASSIS_CONTROL_FREQUENCE * m.pid_ctrler.Dbuf[0];
+            m.accel = Config::CHASSIS_CONTROL_FREQUENCE * m.pid_ctrler.Dbuf;
         }
     }
 }  // namespace Chassis

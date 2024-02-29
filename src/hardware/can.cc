@@ -51,10 +51,9 @@ namespace Hardware
         delete ifr;
     }
 
-    bool Can_interface::can_dump(Types::debug_info_t *debug) {
+    bool Can_interface::can_dump() {
         for (;;) {
             if (init_flag != false) {
-//                debug->err = false;
                 // read CAN frame
                 if (read(soket_id, &frame_r, sizeof(can_frame)) <= 0) {
                     perror("Error reading CAN frame");
@@ -62,17 +61,8 @@ namespace Hardware
                 } else {
                     // printf("not reading!\n");
                 }
-
                 callback_fun(frame_r);
-
-//                debug->can_f.can_id = frame_r.can_id;
-//                debug->can_f.can_dlc = frame_r.can_dlc;
-
-//                for (int i = 0; i < frame_r.can_dlc; i++) {
-//                    debug->can_f.data[i] = frame_r.data[i];
-//                }
             }
-//            debug->err = true;
         }
     }
 

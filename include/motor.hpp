@@ -3,7 +3,6 @@
 
 #include "pid_controller.hpp"
 #include "types.hpp"
-#include "string"
 
 namespace Hardware
 {
@@ -16,6 +15,8 @@ namespace Hardware
         uint8_t temperate = 0;
         int16_t last_ecd = 0;
     };
+
+    template<typename PidType>
     class Motor
     {
        public:
@@ -24,7 +25,7 @@ namespace Hardware
 
        private:
        public:
-        Pid::Pid_ctrl pid_ctrler;
+        PidType pid_ctrler;
         // TODO: can bus api related
         motor_can_message motor_measure;
 

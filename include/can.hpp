@@ -26,7 +26,7 @@ namespace Hardware
         Can_interface();
         ~Can_interface();
         bool can_send(uint64_t pkg);
-        bool can_dump(Types::debug_info_t *debug);
+        bool can_dump();
         void init(const CallbackType &callback);
 
        private:
