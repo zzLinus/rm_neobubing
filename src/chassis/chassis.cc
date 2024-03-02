@@ -7,7 +7,7 @@ namespace Chassis
     Chassis::Chassis() {
         can_itrf = std::make_shared<Hardware::Can_interface>();
         // 电机初始化
-        motors.assign(4, Hardware::Motor<Pid::Pid_position>{ Config::M3508_SPEED_PID_CONFIG });
+        motors.assign(4, Hardware::Motor{ Config::M3508_SPEED_PID_CONFIG });
     }
 
     void Chassis::init() {
@@ -51,11 +51,14 @@ namespace Chassis
     }
 
     void Chassis::send_motor_current() {
-        uint64_t pkg = 0;
+        can_frame send_frame{};
+        send_frame.can_id = 0x200;
+        send_frame.can_dlc = 8;
         for (int i = 0; i < motors.size(); i++) {
-            pkg = pkg | (((uint64_t)motors[i].give_current & 0xffff) << (16 * i));
+            send_frame.data[i * 2] = (motors[i].give_current >> 8);
+            send_frame.data[i * 2 + 1] = (motors[i].give_current & 0xff);
         }
-        can_itrf->can_send(pkg);
+        can_itrf->can_send(send_frame);
     }
 
     void Chassis::decomposition_speed() {

@@ -16,16 +16,15 @@ namespace Hardware
         int16_t last_ecd = 0;
     };
 
-    template<typename PidType>
     class Motor
     {
        public:
-        Motor(const Pid::Pid_config &config);
+        explicit Motor(const Pid::Pid_config &config) : pid_ctrler(config) {};
         ~Motor() = default;
 
        private:
        public:
-        PidType pid_ctrler;
+        Pid::Pid_position pid_ctrler;
         // TODO: can bus api related
         motor_can_message motor_measure;
 

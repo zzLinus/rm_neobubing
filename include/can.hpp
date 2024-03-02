@@ -25,7 +25,7 @@ namespace Hardware
 
         Can_interface();
         ~Can_interface();
-        bool can_send(uint64_t pkg);
+        bool can_send(const can_frame &frame);
         bool can_dump();
         void init(const CallbackType &callback);
 

@@ -47,7 +47,7 @@ namespace Chassis
 
         fp32 max_wheel_speed = 2.5f;
 
-        std::vector<Hardware::Motor<Pid::Pid_position>> motors;
+        std::vector<Hardware::Motor> motors;
     };
 }  // namespace Chassis
 

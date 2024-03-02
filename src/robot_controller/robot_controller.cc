@@ -7,18 +7,27 @@ namespace Robot
           chassis_angle_pid(Config::M3508_SPEED_PID_CONFIG) {
         robot_set = std::make_shared<Robot_set>();
         chassis.init();
+        gimbal.init();
     }
 
     bool Robot_ctrl::start() {
         auto f = &Hardware::Can_interface::can_dump;
-        chassis_can_tread = std::make_unique<std::thread>(
+//        chassis_can_tread = std::make_unique<std::thread>(
+//            &Hardware::Can_interface::can_dump,
+//            chassis.can_itrf
+//            );
+//        chassis_tread = std::make_unique<std::thread>(
+//            &Robot_ctrl::chassis_task,
+//            this
+//            );
+        gimbal_can_tread = std::make_unique<std::thread>(
             &Hardware::Can_interface::can_dump,
-            chassis.can_itrf
+            gimbal.can_itrf
             );
-        chassis_tread = std::make_unique<std::thread>(
-            &Robot_ctrl::chassis_task,
+        gimbal_tread = std::make_unique<std::thread>(
+            &Robot_ctrl::gimbal_task,
             this
-            );
+        );
         return true;
     }
 
@@ -44,6 +53,19 @@ namespace Robot
                 }
             }
             chassis.control_loop();
+            std::this_thread::sleep_for(std::chrono::milliseconds(2));
+        }
+    }
+    void Robot_ctrl::gimbal_task() {
+        while(true) {
+            if(robot_set->mode == Types::ROBOT_MODE::ROBOT_NO_FORCE) {
+                gimbal.no_force = true;
+            }
+            else {
+                gimbal.no_force = false;
+                gimbal.v_yaw_set = robot_set->v_yaw_set;
+            }
+            gimbal.control_loop();
             std::this_thread::sleep_for(std::chrono::milliseconds(2));
         }
     }

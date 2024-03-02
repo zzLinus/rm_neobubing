@@ -40,6 +40,14 @@ namespace Config
         0.0f,                      // MAX_IOUT
     };
 
+    const typename Pid::Pid_config YAW_SPEED_PID_CONFIG {
+        40.0f,
+        3.0f,
+        0.0f,
+        30000.0f,
+        5000.0f,
+    };
+
     constexpr fp32 CHASSIS_SPIN_SPEED = 7;
 
     // NOTE: chassis
@@ -57,7 +65,9 @@ namespace Config
 
     // m3508 rmp change to chassis speed,
     // m3508转化成底盘速度(m/s)的比例，
-    const fp32 CHASSIS_MOTOR_RPM_TO_VECTOR_SEN = 0.000415809748903494517209f;
+    constexpr fp32 CHASSIS_MOTOR_RPM_TO_VECTOR_SEN = 0.000415809748903494517209f;
+    constexpr fp32 M6020_ECD_TO_RAD = 2.f * M_PIf / 8192.f;
+    constexpr fp32 RPM_TO_RAD_S = 2.f * M_PIf / 60.f;
     const fp32 CHASSIS_CONTROL_FREQUENCE = 500.0f;
 
     // NOTE: chassis task control time 0.002s

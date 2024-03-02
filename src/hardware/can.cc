@@ -30,6 +30,8 @@ namespace Hardware
         rfilter[2].can_mask = 0x3ff;
         rfilter[3].can_id = 0x204;
         rfilter[3].can_mask = 0x3ff;
+        rfilter[3].can_id = 0x205;
+        rfilter[3].can_mask = 0x3ff;
         setsockopt(soket_id, SOL_CAN_RAW, CAN_RAW_FILTER, &rfilter, sizeof(rfilter));
 
         std::strcpy(ifr->ifr_name, Config::CAN_CHANNEL);
@@ -53,7 +55,7 @@ namespace Hardware
 
     bool Can_interface::can_dump() {
         for (;;) {
-            if (init_flag != false) {
+            if (init_flag) {
                 // read CAN frame
                 if (read(soket_id, &frame_r, sizeof(can_frame)) <= 0) {
                     perror("Error reading CAN frame");
@@ -66,21 +68,9 @@ namespace Hardware
         }
     }
 
-    bool Can_interface::can_send(uint64_t can_pkg) {
-        // eg : test can pkd <01BB117001BBEE90>
-        frame_w.can_id = 0x200;
-        frame_w.can_dlc = 8;
-        frame_w.data[1] = (uint8_t)(can_pkg >> 0);
-        frame_w.data[0] = (uint8_t)(can_pkg >> 8);
-        frame_w.data[3] = (uint8_t)(can_pkg >> 16);
-        frame_w.data[2] = (uint8_t)(can_pkg >> 24);
-        frame_w.data[5] = (uint8_t)(can_pkg >> 32);
-        frame_w.data[4] = (uint8_t)(can_pkg >> 40);
-        frame_w.data[7] = (uint8_t)(can_pkg >> 48);
-        frame_w.data[6] = (uint8_t)(can_pkg >> 56);
-
+    bool Can_interface::can_send(const can_frame &frame) {
         /* send CAN frame */
-        write(soket_id, &frame_w, sizeof(can_frame));
+        write(soket_id, &frame, sizeof(can_frame));
 
         return true;
     }

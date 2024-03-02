@@ -4,8 +4,10 @@
 #include <memory>
 
 #include "motor.hpp"
+#include "can.hpp"
 #include "robot.hpp"
 #include "config.hpp"
+#include "robot.hpp"
 
 namespace Gimbal
 {
@@ -15,14 +17,21 @@ namespace Gimbal
        public:
         Gimbal();
         ~Gimbal() = default;
-        void init(const std::shared_ptr<Robot::Robot_set> &robot);
+        void init();
         void control_loop();
+        void unpack(const can_frame &frame);
+        void update_speed();
+        void send_motor_current();
 
        public:
-        Hardware::Motor<Pid::Pid_rad> yaw_motor;
-        Hardware::Motor<Pid::Pid_rad> pitch_motor;
+        bool no_force = true;
+        fp32 v_yaw_set = 0.f;
 
-        std::shared_ptr<Robot::Robot_set> robot_set;
+        std::shared_ptr<Hardware::Can_interface> can_itrf;
+        Hardware::Motor yaw_motor;
+        Hardware::Motor pitch_motor;
+        Pid::Pid_rad yaw_absolute_pid;
+//        Pid::Pid_rad pitch_absolute_pid;
     };
 
 }  // namespace Gimbal
