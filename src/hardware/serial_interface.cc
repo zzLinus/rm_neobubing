@@ -5,7 +5,7 @@
 namespace Hardware
 {
     Serial_interface::Serial_interface()
-        : serial::Serial("/dev/ttyACM0", 115200, serial::Timeout::simpleTimeout(1000)) {
+        : serial::Serial(std::string("/dev/ttyACM0"), 115200, serial::Timeout::simpleTimeout(1000)) {
     }
 
     Serial_interface::~Serial_interface() {
@@ -30,7 +30,7 @@ namespace Hardware
     inline int Serial_interface::unpack() {
         memcpy(buffer, read(sizeof(ReceivePacket)).c_str(), sizeof(ReceivePacket));
         fromVector(buffer, &rp);
-//        printf("serial info: %f %f %f\n", rp.yaw, rp.pitch, rp.roll);
+        printf("serial info: %f %f %f %f %f %f\n", rp.yaw, rp.pitch, rp.roll, rp.yaw_v, rp.pitch_v, rp.roll_v);
 
         return 0;
     }

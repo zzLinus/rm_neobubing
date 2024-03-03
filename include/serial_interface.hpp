@@ -11,6 +11,9 @@ namespace Hardware
         float roll;
         float pitch;
         float yaw;
+        float yaw_v;
+        float pitch_v;
+        float roll_v;
     } __attribute__((packed)) ReceivePacket;
 
     class Serial_interface : serial::Serial
