@@ -3,6 +3,7 @@
 
 #include <memory>
 
+#include "robot.hpp"
 #include "can.hpp"
 #include "motor.hpp"
 #include "types.hpp"
@@ -17,7 +18,7 @@ namespace Chassis
         ~Chassis() = default;
         void unpack(const can_frame &frame);
         void update_speed();
-        void init();
+        void init(const std::shared_ptr<Robot::Robot_set> &robot);
         void decomposition_speed();
         void send_motor_current();
         void control_loop();
@@ -48,6 +49,7 @@ namespace Chassis
         fp32 max_wheel_speed = 2.5f;
 
         std::vector<Hardware::Motor> motors;
+        std::shared_ptr<Robot::Robot_set> robot_set;
     };
 }  // namespace Chassis
 

@@ -6,7 +6,7 @@ namespace Robot
 {
     Robot_ctrl::Robot_ctrl() : chassis_angle_pid(Config::CHASSIS_FOLLOW_GIMBAL_PID_CONFIG) {
         robot_set = std::make_shared<Robot_set>();
-        chassis.init();
+        chassis.init(robot_set);
         gimbal.init(robot_set);
     }
 

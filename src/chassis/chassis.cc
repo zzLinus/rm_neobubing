@@ -8,8 +8,9 @@ namespace Chassis
         motors.assign(4, Hardware::Motor{ Config::M3508_SPEED_PID_CONFIG });
     }
 
-    void Chassis::init() {
+    void Chassis::init(const std::shared_ptr<Robot::Robot_set> &robot) {
         can_itrf->init([&](auto frame) { unpack(frame); }, "can1");
+        robot_set = robot;
     }
 
     void Chassis::unpack(const can_frame &frame) {
