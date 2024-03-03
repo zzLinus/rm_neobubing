@@ -26,12 +26,12 @@ namespace Robot
                 chassis.no_force = false;
 
                 fp32 sin_yaw, cos_yaw;
-                sincosf(-robot_set->chassis_relative_angle, &sin_yaw, &cos_yaw);
+                sincosf(-robot_set->yaw_relative, &sin_yaw, &cos_yaw);
                 chassis.vx_set = cos_yaw * robot_set->vx_set + sin_yaw * robot_set->vy_set;
                 chassis.vy_set = -sin_yaw * robot_set->vx_set + cos_yaw * robot_set->vy_set;
 
                 if (robot_set->mode == Types::ROBOT_MODE::ROBOT_FOLLOW_GIMBAL) {
-                    chassis_angle_pid.calc(robot_set->chassis_relative_angle, 0.f);
+                    chassis_angle_pid.calc(robot_set->yaw_relative, 0.f);
                     chassis.wz_set = chassis_angle_pid.out;
                 } else {
                     chassis.wz_set = robot_set->wz_set;
@@ -47,10 +47,9 @@ namespace Robot
                 gimbal.no_force = true;
             } else {
                 gimbal.no_force = false;
-                gimbal.yaw_set = robot_set->v_yaw_set;
+                gimbal.yaw_set = robot_set->yaw_set;
             }
             gimbal.control_loop();
-            robot_set->chassis_relative_angle = (fp32)gimbal.yaw_motor.motor_measure.ecd * Config::M6020_ECD_TO_RAD;
             std::this_thread::sleep_for(std::chrono::milliseconds(2));
         }
     }

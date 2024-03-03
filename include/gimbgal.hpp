@@ -22,11 +22,16 @@ namespace Gimbal
         void unpack(const can_frame &frame);
         void update_data();
         void send_motor_current();
+        //TODO gimbal_init, init the origin yaw and pitch
 
        public:
         bool no_force = true;
+
         fp32 yaw_set = 0.f;
         fp32 pitch_set = 0.f;
+
+        fp32 yaw_gyro = 0.f;
+        fp32 pitch_gyro = 0.f;
 
         std::shared_ptr<Hardware::Can_interface> can_itrf;
         std::shared_ptr<Robot::Robot_set> robot_set;

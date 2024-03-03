@@ -12,8 +12,8 @@ namespace Robot
         fp32 wz_set = 0.f;
 
         /** gimbal_control **/
-        fp32 v_yaw_set = 0.f;
-        fp32 v_pitch_set = 0.f;
+        fp32 yaw_set = 0.f;
+        fp32 pitch_set = 0.f;
 
         /** IMU **/
         fp32 ins_yaw = 0.f;
@@ -24,7 +24,8 @@ namespace Robot
         fp32 ins_roll_v = 0.f;
 
         /** other **/
-        fp32 chassis_relative_angle = 0.f;
+        fp32 yaw_relative = 0.f;
+        fp32 pitch_relative = 0.f;
         Types::ROBOT_MODE mode = Types::ROBOT_MODE::ROBOT_NO_FORCE;
     };
 }

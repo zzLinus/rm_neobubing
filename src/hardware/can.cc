@@ -21,7 +21,7 @@ namespace Hardware
             exit(-1);
         }
 
-        struct can_filter rfilter[5];
+        struct can_filter rfilter[6];
         rfilter[0].can_id = 0x201;
         rfilter[0].can_mask = 0x3ff;
         rfilter[1].can_id = 0x202;
@@ -32,6 +32,8 @@ namespace Hardware
         rfilter[3].can_mask = 0x3ff;
         rfilter[4].can_id = 0x205;
         rfilter[4].can_mask = 0x3ff;
+        rfilter[5].can_id = 0x206;
+        rfilter[5].can_mask = 0x3ff;
         setsockopt(soket_id, SOL_CAN_RAW, CAN_RAW_FILTER, &rfilter, sizeof(rfilter));
 
         std::strcpy(ifr->ifr_name, can_channel);

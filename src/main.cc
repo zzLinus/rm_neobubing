@@ -35,13 +35,14 @@ int main(int argc, char **argv) {
             robot.robot_set->ins_roll_v = serial.rp.roll_v;
             robot.robot_set->mode = Types::ROBOT_MODE::ROBOT_NOT_FOLLOW;
             rad.update(UserLib::rad_format((fp32)robot.gimbal.yaw_motor.motor_measure.ecd * Config::M6020_ECD_TO_RAD));
+            printf("%f\n", robot.robot_set->pitch_relative);
 //            printf("%f,%f,%f\n", (fp32)step / 1000.f, input, rad.now);
 
 //            if(fabs(angle) >= 0.5f) {
 //                da *= -1;
 //            }
 //            angle += da;
-            robot.robot_set->v_yaw_set = angle;
+            robot.robot_set->yaw_set = angle;
 
             std::this_thread::sleep_for(2ms);
         }

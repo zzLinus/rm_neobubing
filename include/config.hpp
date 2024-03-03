@@ -55,8 +55,7 @@ namespace Config
     constexpr fp32 RPM_TO_RAD_S = 2.f * M_PIf / 60.f;
     constexpr fp32 CHASSIS_CONTROL_FREQUENCE = 500.0f;
 
-    constexpr fp32 GIMBAL_YAW_OFFSET = 4200;
-    constexpr fp32 GIMBAL_PITCH_OFFSET = 0;
-
+    constexpr fp32 GIMBAL_YAW_OFFSET_ECD = 4200;
+    constexpr fp32 GIMBAL_PITCH_OFFSET_ECD = 7875;
 
 }  // namespace Config
