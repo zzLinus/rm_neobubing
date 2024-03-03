@@ -23,6 +23,15 @@ namespace Status
 
 namespace Types
 {
+    typedef struct ReceivePacket
+    {
+        float roll;
+        float pitch;
+        float yaw;
+        float yaw_v;
+        float pitch_v;
+        float roll_v;
+    } __attribute__((packed)) ReceivePacket;
 
     typedef struct
     {
@@ -53,9 +62,9 @@ namespace Types
         can_frame can_f;
         uint64_t pkg;
         bool err;
-		std::string debuginfo1;
-		std::string debuginfo2;
-		std::string debuginfo3;
+        std::string debuginfo1;
+        std::string debuginfo2;
+        std::string debuginfo3;
 
     } debug_info_t;
 
@@ -84,7 +93,8 @@ namespace Types
         } key;
 
     } RC_ctrl_t;
-    enum ROBOT_MODE {
+    enum ROBOT_MODE
+    {
         ROBOT_NO_FORCE,
         ROBOT_FOLLOW_GIMBAL,
         ROBOT_NOT_FOLLOW
