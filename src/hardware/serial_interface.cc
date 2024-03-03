@@ -30,7 +30,7 @@ namespace Hardware
     inline int Serial_interface::unpack() {
         memcpy(buffer, read(sizeof(ReceivePacket)).c_str(), sizeof(ReceivePacket));
         fromVector(buffer, &rp);
-        printf("serial info: %f %f %f %f %f %f\n", rp.yaw, rp.pitch, rp.roll, rp.yaw_v, rp.pitch_v, rp.roll_v);
+//        printf("serial info: %f %f %f %f %f %f\n", rp.yaw, rp.pitch, rp.roll, rp.yaw_v, rp.pitch_v, rp.roll_v);
 
         return 0;
     }

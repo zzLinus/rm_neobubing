@@ -4,23 +4,17 @@
 
 namespace Robot
 {
-    Robot_ctrl::Robot_ctrl() : chassis_angle_pid(Config::M3508_SPEED_PID_CONFIG) {
+    Robot_ctrl::Robot_ctrl() : chassis_angle_pid(Config::CHASSIS_FOLLOW_GIMBAL_PID_CONFIG) {
         robot_set = std::make_shared<Robot_set>();
         chassis.init();
-        gimbal.init();
+        gimbal.init(robot_set);
     }
 
     bool Robot_ctrl::start() {
 //        chassis_can_tread = std::make_unique<std::thread>(&Hardware::Can_interface::can_dump, chassis.can_itrf);
 //        chassis_tread = std::make_unique<std::thread>(&Robot_ctrl::chassis_task, this);
-         gimbal_can_tread = std::make_unique<std::thread>(
-             &Hardware::Can_interface::can_dump,
-             gimbal.can_itrf
-             );
-         gimbal_tread = std::make_unique<std::thread>(
-             &Robot_ctrl::gimbal_task,
-             this
-        );
+        gimbal_can_tread = std::make_unique<std::thread>(&Hardware::Can_interface::can_dump, gimbal.can_itrf);
+        gimbal_tread = std::make_unique<std::thread>(&Robot_ctrl::gimbal_task, this);
         return true;
     }
 
@@ -53,10 +47,10 @@ namespace Robot
                 gimbal.no_force = true;
             } else {
                 gimbal.no_force = false;
-                gimbal.yaw = robot_set->ins_yaw;
                 gimbal.yaw_set = robot_set->v_yaw_set;
             }
             gimbal.control_loop();
+            robot_set->chassis_relative_angle = (fp32)gimbal.yaw_motor.motor_measure.ecd * Config::M6020_ECD_TO_RAD;
             std::this_thread::sleep_for(std::chrono::milliseconds(2));
         }
     }

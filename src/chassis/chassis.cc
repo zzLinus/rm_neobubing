@@ -1,7 +1,5 @@
 #include "chassis.hpp"
 
-#include <iostream>
-
 namespace Chassis
 {
     Chassis::Chassis() {

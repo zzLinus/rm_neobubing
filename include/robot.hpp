@@ -19,6 +19,9 @@ namespace Robot
         fp32 ins_yaw = 0.f;
         fp32 ins_pitch = 0.f;
         fp32 ins_roll = 0.f;
+        fp32 ins_yaw_v = 0.f;
+        fp32 ins_pitch_v = 0.f;
+        fp32 ins_roll_v = 0.f;
 
         /** other **/
         fp32 chassis_relative_angle = 0.f;

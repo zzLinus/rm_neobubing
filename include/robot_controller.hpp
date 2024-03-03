@@ -26,7 +26,7 @@ namespace Robot
         std::unique_ptr<std::thread> gimbal_tread;
         std::unique_ptr<std::thread> gimbal_can_tread;
 
-        Pid::Pid_position chassis_angle_pid;
+        Pid::Pid_rad chassis_angle_pid;
         std::shared_ptr<Robot_set> robot_set;
         Chassis::Chassis chassis;
         Gimbal::Gimbal gimbal;
