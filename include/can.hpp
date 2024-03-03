@@ -27,7 +27,7 @@ namespace Hardware
         ~Can_interface();
         bool can_send(const can_frame &frame);
         bool can_dump();
-        void init(const CallbackType &callback);
+        void init(const CallbackType &callback, const char *can_channel);
 
        private:
         sockaddr_can *addr;

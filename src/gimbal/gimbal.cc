@@ -12,7 +12,7 @@ namespace Gimbal
     }
 
     void Gimbal::init() {
-        can_itrf->init([&](auto frame) { unpack(frame); });
+        can_itrf->init([&](auto frame) { unpack(frame); }, "can0");
     }
 
     void Gimbal::control_loop() {
@@ -22,7 +22,10 @@ namespace Gimbal
             pitch_motor.give_current = 0.f;
         }
         else {
-            yaw_motor.speed_set = v_yaw_set;
+            yaw_absolute_pid.calc(yaw, yaw_set);
+//            yaw_motor.give_current = (int16_t)yaw_absolute_pid.out;
+            yaw_motor.speed_set = yaw_absolute_pid.out;
+
             yaw_motor.pid_ctrler.calc(yaw_motor.speed, yaw_motor.speed_set);
             yaw_motor.give_current = (int16_t)yaw_motor.pid_ctrler.out;
         }

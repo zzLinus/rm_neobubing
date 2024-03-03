@@ -26,6 +26,8 @@ namespace Gimbal
        public:
         bool no_force = true;
         fp32 v_yaw_set = 0.f;
+        fp32 yaw = 0.f;
+        fp32 yaw_set = 0.f;
 
         std::shared_ptr<Hardware::Can_interface> can_itrf;
         Hardware::Motor yaw_motor;

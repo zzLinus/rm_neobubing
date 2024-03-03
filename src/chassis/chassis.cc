@@ -11,7 +11,7 @@ namespace Chassis
     }
 
     void Chassis::init() {
-        can_itrf->init([&](auto frame) { unpack(frame); });
+        can_itrf->init([&](auto frame) { unpack(frame); }, "can1");
     }
 
     void Chassis::unpack(const can_frame &frame) {

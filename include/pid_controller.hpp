@@ -53,7 +53,8 @@ namespace Pid
        public:
         explicit Pid_rad(const Pid_config &config);
         ~Pid_rad() = default;
-        void calc(fp32 get, fp32 set, fp32 error_delta);
+//        void calc(fp32 get, fp32 set, fp32 error_delta);
+        void calc(fp32 get, fp32 set);
 
        public:
         fp32 out = 0.f;
@@ -61,6 +62,7 @@ namespace Pid
         fp32 Iout = 0.f;
         fp32 Dout = 0.f;
         fp32 err = 0.f;
+        fp32 last_err = 0.f;
 
     };
 }  // namespace Pid
