@@ -24,10 +24,12 @@ namespace Config
         0.2f,    // MAX_IOUT
     };
 
+    //TODO Adjust PID parameters
+
     const typename Pid::Pid_config GIMBAL_YAW_ABSOLUTE_PID_CONFIG{
         12.0f,  // KP
         0.0f,   // KI
-        0.3f,    // KD
+        0.3f,   // KD
         10.0f,  // MAX_OUT
         0.0f,   // MAX_IOUT
     };          // MAX_IOUT
@@ -40,12 +42,36 @@ namespace Config
         0.0f,   // MAX_IOUT
     };
 
+    const typename Pid::Pid_config GIMBAL_YAW_RELATIVE_PID_CONFIG{
+        8.0f,
+        0.0f,
+        0.0f,
+        10.0f,
+        0.0f,
+    };
+
+    const typename Pid::Pid_config GIMBAL_PITCH_RELATIVE_PID_CONFIG{
+        15.0f,
+        0.0f,
+        0.0f,
+        10.0f,
+        0.0f,
+    };
+
     const typename Pid::Pid_config YAW_SPEED_PID_CONFIG{
-        8200.0f / 3.f,
-        15.0f / 4.f,
+        8200.0f / 2.f,
+        15.0f / 3.f,
         0.0f,
         30000.0f / 3.f,
-        5000.0f / 3.f,
+        5000.0f / 2.f,
+    };
+
+    const typename Pid::Pid_config PITCH_SPEED_PID_CONFIG{
+        8200.0f / 6.f,
+        15.0f / 6.f,
+        0.0f,
+        30000.0f / 6.f,
+        5000.0f / 6.f,
     };
 
     // m3508 rmp change to chassis speed,
@@ -57,5 +83,8 @@ namespace Config
 
     constexpr fp32 GIMBAL_YAW_OFFSET_ECD = 4200;
     constexpr fp32 GIMBAL_PITCH_OFFSET_ECD = 7875;
+
+    constexpr uint32_t GIMBAL_INIT_STOP_TIME = 2000;
+    constexpr fp32 GIMBAL_INIT_EXP = 0.1f;
 
 }  // namespace Config

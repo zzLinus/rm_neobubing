@@ -29,7 +29,7 @@ namespace Hardware
 
     template<class T>
     Serial_interface<T>::Serial_interface()
-        : serial::Serial(std::string("/dev/ttyACM1"), 115200, serial::Timeout::simpleTimeout(1000)) {
+        : serial::Serial(std::string("/dev/ttyACM0"), 115200, serial::Timeout::simpleTimeout(1000)) {
     }
 
     template<class T>
@@ -58,7 +58,7 @@ namespace Hardware
     inline int Serial_interface<T>::unpack() {
         memcpy(buffer, read(sizeof(T)).c_str(), sizeof(T));
         fromVector(buffer, &rp);
-        printf("serial info: %f %f %f %f %f %f\n", rp.yaw, rp.pitch, rp.roll, rp.yaw_v, rp.pitch_v, rp.roll_v);
+//        printf("serial info: %f %f %f %f %f %f\n", rp.yaw, rp.pitch, rp.roll, rp.yaw_v, rp.pitch_v, rp.roll_v);
 
         return 0;
     }

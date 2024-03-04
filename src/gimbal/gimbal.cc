@@ -6,15 +6,40 @@ namespace Gimbal
 
     Gimbal::Gimbal()
         : yaw_motor(Config::YAW_SPEED_PID_CONFIG),
-          pitch_motor(Config::GIMBAL_PITCH_ABSOLUTE_PID_CONFIG),
+          pitch_motor(Config::PITCH_SPEED_PID_CONFIG),
           yaw_absolute_pid(Config::GIMBAL_YAW_ABSOLUTE_PID_CONFIG),
-          pitch_absolute_pid(Config::GIMBAL_PITCH_ABSOLUTE_PID_CONFIG) {
+          pitch_absolute_pid(Config::GIMBAL_PITCH_ABSOLUTE_PID_CONFIG),
+          yaw_relative_pid(Config::GIMBAL_YAW_RELATIVE_PID_CONFIG),
+          pitch_relative_pid(Config::GIMBAL_PITCH_RELATIVE_PID_CONFIG) {
         can_itrf = std::make_shared<Hardware::Can_interface>();
     }
 
     void Gimbal::init(const std::shared_ptr<Robot::Robot_set>& robot) {
         can_itrf->init([&](auto frame) { unpack(frame); }, "can0");
         robot_set = robot;
+    }
+
+    void Gimbal::init_loop() {
+        update_data();
+        yaw_relative_pid.calc(robot_set->yaw_relative, 0.f);
+        yaw_motor.speed_set = yaw_relative_pid.out;
+        yaw_motor.pid_ctrler.calc(yaw_gyro, yaw_motor.speed_set);
+        yaw_motor.give_current = (int16_t)yaw_motor.pid_ctrler.out;
+
+        pitch_relative_pid.calc(robot_set->pitch_relative, 0.f);
+        pitch_motor.speed_set = pitch_relative_pid.out;
+        pitch_motor.pid_ctrler.calc(pitch_gyro, pitch_motor.speed_set);
+        pitch_motor.give_current = (int16_t)pitch_motor.pid_ctrler.out;
+
+        if(fabs(robot_set->yaw_relative) < Config::GIMBAL_INIT_EXP &&
+            fabs(robot_set->pitch_relative) < Config::GIMBAL_INIT_EXP) {
+            init_stop_times += 2;
+        }
+        else {
+            init_stop_times = 0;
+        }
+        inited = init_stop_times >= Config::GIMBAL_INIT_STOP_TIME;
+        send_motor_current();
     }
 
     void Gimbal::control_loop() {
@@ -28,10 +53,10 @@ namespace Gimbal
             yaw_motor.pid_ctrler.calc(yaw_gyro, yaw_motor.speed_set);
             yaw_motor.give_current = (int16_t)yaw_motor.pid_ctrler.out;
 
-            //            pitch_absolute_pid.calc(robot_set->ins_pitch, pitch_set);
-            //            pitch_motor.speed_set = pitch_absolute_pid.out;
-            //            pitch_motor.pid_ctrler.calc(pitch_gyro, pitch_motor.speed_set);
-            //            pitch_motor.give_current = (int16_t)pitch_motor.pid_ctrler.out;
+            pitch_absolute_pid.calc(robot_set->ins_pitch, pitch_set);
+            pitch_motor.speed_set = pitch_absolute_pid.out;
+            pitch_motor.pid_ctrler.calc(pitch_gyro, pitch_motor.speed_set);
+            pitch_motor.give_current = (int16_t)pitch_motor.pid_ctrler.out;
         }
         send_motor_current();
     }
@@ -57,8 +82,8 @@ namespace Gimbal
         robot_set->pitch_relative = UserLib::rad_format(
             Config::M6020_ECD_TO_RAD * ((fp32)pitch_motor.motor_measure.ecd - Config::GIMBAL_PITCH_OFFSET_ECD));
 
-        yaw_gyro = std::cos(robot_set->pitch_relative) * robot_set->ins_roll_v
-                   - std::sin(robot_set->pitch_relative) * robot_set->ins_yaw_v;
+        yaw_gyro = std::cos(robot_set->pitch_relative) * robot_set->ins_roll_v -
+                   std::sin(robot_set->pitch_relative) * robot_set->ins_yaw_v;
         pitch_gyro = robot_set->ins_pitch_v;
     }
 
@@ -68,6 +93,8 @@ namespace Gimbal
         send_frame.can_dlc = 8;
         send_frame.data[0] = (yaw_motor.give_current >> 8);
         send_frame.data[1] = (yaw_motor.give_current & 0xff);
+        send_frame.data[2] = (pitch_motor.give_current >> 8);
+        send_frame.data[3] = (pitch_motor.give_current & 0xff);
         can_itrf->can_send(send_frame);
     }
 
