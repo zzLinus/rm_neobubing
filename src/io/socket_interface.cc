@@ -38,6 +38,7 @@ namespace Io
         for (size_t i = 0; i < sizeof(Robot::Robot_set); i++) {
             *((uint8_t *)p_robot_set.get() + i) = buffer[i];
         }
+        p_robot_set->mode = Types::ROBOT_MODE::ROBOT_NOT_FOLLOW;
     }
 
     Server_socket_interface::Server_socket_interface(std::shared_ptr<Robot::Robot_set> robot_set)

@@ -8,6 +8,7 @@
 #include "motor.hpp"
 #include "types.hpp"
 #include <vector>
+#include "utils.hpp"
 
 namespace Chassis
 {

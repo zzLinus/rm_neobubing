@@ -16,25 +16,25 @@ namespace Robot
     }
 
     void Robot_ctrl::init_join() const {
-        if(gimbal_init_thread != nullptr) {
+        if (gimbal_init_thread != nullptr) {
             gimbal_init_thread->join();
         }
     }
 
     void Robot_ctrl::start() {
 #warning chassis is closed
-//        chassis_can_thread = std::make_unique<std::thread>(&Hardware::Can_interface::can_dump, chassis.can_itrf);
-//        chassis_thread = std::make_unique<std::thread>(&Robot_ctrl::chassis_task, this);
-        gimbal_thread = std::make_unique<std::thread>(&Robot_ctrl::gimbal_task, this);
+        chassis_can_thread = std::make_unique<std::thread>(&Hardware::Can_interface::can_dump, chassis.can_itrf);
+        chassis_thread = std::make_unique<std::thread>(&Robot_ctrl::chassis_task, this);
+        // gimbal_thread = std::make_unique<std::thread>(&Robot_ctrl::gimbal_task, this);
     }
 
     void Robot_ctrl::join() const {
-        if(chassis_thread != nullptr) {
+        if (chassis_thread != nullptr) {
             chassis_thread->join();
         }
-        if(gimbal_thread != nullptr) {
-            gimbal_thread->join();
-        }
+        // if(gimbal_thread != nullptr) {
+        //     gimbal_thread->join();
+        // }
     }
 
     void Robot_ctrl::chassis_task() {
@@ -62,7 +62,7 @@ namespace Robot
     }
 
     void Robot_ctrl::gimbal_init_task() {
-        while(!gimbal.inited) {
+        while (!gimbal.inited) {
             gimbal.init_loop();
             std::this_thread::sleep_for(std::chrono::milliseconds(2));
         }
