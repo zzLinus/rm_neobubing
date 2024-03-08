@@ -19,7 +19,7 @@ namespace Gimbal
         Robot::hardware->register_callback<CAN0>(
             0x205, [&](const auto &frame){yaw_motor.unpack(frame);});
         Robot::hardware->register_callback<CAN0>(
-            0x206, [&](const auto &frame){yaw_motor.unpack(frame);});
+            0x206, [&](const auto &frame){pitch_motor.unpack(frame);});
     }
 
     void Gimbal::init_loop() {
