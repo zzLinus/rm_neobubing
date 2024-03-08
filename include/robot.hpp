@@ -1,9 +1,10 @@
 #pragma once
 
-#include "types.hpp"
-#include "hardware_list.hpp"
 #include "can.hpp"
+#include "memory"
+#include "hardware_manager.hpp"
 #include "serial_interface.hpp"
+#include "types.hpp"
 
 namespace Robot
 {
@@ -32,8 +33,8 @@ namespace Robot
         Types::ROBOT_MODE mode = Types::ROBOT_MODE::ROBOT_NO_FORCE;
     };
 
-    using RobotHardware = Hardware::Hardware_list<Hardware::Can_interface, Hardware::Can_interface,
+    using RobotHardware = Hardware::Hardware_manager<Hardware::Can_interface, Hardware::Can_interface,
                                                   Hardware::Serial_interface<Types::ReceivePacket>>;
-    extern std::shared_ptr<RobotHardware> hardwareList;
+    extern std::shared_ptr<RobotHardware> hardware;
 }
 

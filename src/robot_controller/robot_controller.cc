@@ -25,8 +25,8 @@ namespace Robot
     }
 
     void Robot_ctrl::join() const {
-        if(hardwareList != nullptr) {
-            Hardware::join(*hardwareList);
+        if(hardware != nullptr) {
+            hardware->join();
         }
         if (chassis_thread != nullptr) {
             chassis_thread->join();
@@ -83,8 +83,8 @@ namespace Robot
     void Robot_ctrl::load_hardware() {
         can0.init("can0");
         can1.init("can1");
-        hardwareList = std::make_shared<RobotHardware>(can0, can1, ser1);
-        Hardware::register_callback<SER1>(*Robot::hardwareList, 0, [&](const Types::ReceivePacket &rp) {
+        hardware = std::make_shared<RobotHardware>(can0, can1, ser1);
+        Robot::hardware->register_callback<SER1>(0, [&](const Types::ReceivePacket &rp) {
             robot_set->ins_yaw = rp.yaw;
             robot_set->ins_pitch = rp.pitch;
             robot_set->ins_roll = rp.roll;

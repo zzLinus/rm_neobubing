@@ -11,8 +11,8 @@ namespace Chassis
         robot_set = robot;
         for(int i = 0; i < motors.size(); i++) {
             auto & mot = motors[i];
-            Hardware::register_callback<CAN1>(*Robot::hardwareList, 0x201 + i,
-                                              [&mot](const auto &frame){mot.unpack(frame);});
+            Robot::hardware->register_callback<CAN1>(
+                0x201 + i, [&mot](const auto &frame){mot.unpack(frame);});
         }
     }
 
@@ -51,7 +51,7 @@ namespace Chassis
             send_frame.data[i * 2] = (motors[i].give_current >> 8);
             send_frame.data[i * 2 + 1] = (motors[i].give_current & 0xff);
         }
-        Hardware::send<CAN1>(*Robot::hardwareList, send_frame);
+        Robot::hardware->send<CAN1>(send_frame);
     }
 
     void Chassis::decomposition_speed() {

@@ -2,5 +2,5 @@
 
 namespace Robot
 {
-    std::shared_ptr<RobotHardware> hardwareList;
+    std::shared_ptr<RobotHardware> hardware;
 }
