@@ -11,12 +11,15 @@ namespace Gimbal
           pitch_absolute_pid(Config::GIMBAL_PITCH_ABSOLUTE_PID_CONFIG),
           yaw_relative_pid(Config::GIMBAL_YAW_RELATIVE_PID_CONFIG),
           pitch_relative_pid(Config::GIMBAL_PITCH_RELATIVE_PID_CONFIG) {
-        can_itrf = std::make_shared<Hardware::Can_interface>();
     }
 
     void Gimbal::init(const std::shared_ptr<Robot::Robot_set>& robot) {
-        can_itrf->init([&](auto frame) { unpack(frame); }, "can0");
         robot_set = robot;
+
+        Hardware::register_callback(*Robot::hardwareList, 0x205,
+                                    [&](const auto &frame){yaw_motor.unpack(frame);});
+        Hardware::register_callback(*Robot::hardwareList, 0x206,
+                                    [&](const auto &frame){pitch_motor.unpack(frame);});
     }
 
     void Gimbal::init_loop() {
@@ -61,18 +64,6 @@ namespace Gimbal
         send_motor_current();
     }
 
-    void Gimbal::unpack(const can_frame& frame) {
-        if (frame.can_id != 0x205 && frame.can_id != 0x206) {
-            return;
-        }
-        auto& motor_t = ((frame.can_id == 0x205) ? yaw_motor : pitch_motor).motor_measure;
-        motor_t.last_ecd = motor_t.last_ecd;
-        motor_t.ecd = (uint16_t)(frame.data[0] << 8 | frame.data[1]);
-        motor_t.speed_rpm = (uint16_t)(frame.data[2] << 8 | frame.data[3]);
-        motor_t.given_current = (uint16_t)(frame.data[4] << 8 | frame.data[5]);
-        motor_t.temperate = frame.data[6];
-    }
-
     void Gimbal::update_data() {
         yaw_motor.speed = Config::RPM_TO_RAD_S * (fp32)yaw_motor.motor_measure.speed_rpm;
         pitch_motor.speed = Config::RPM_TO_RAD_S * (fp32)pitch_motor.motor_measure.speed_rpm;
@@ -95,7 +86,7 @@ namespace Gimbal
         send_frame.data[1] = (yaw_motor.give_current & 0xff);
         send_frame.data[2] = (pitch_motor.give_current >> 8);
         send_frame.data[3] = (pitch_motor.give_current & 0xff);
-        can_itrf->can_send(send_frame);
+        Hardware::send<CAN0>(*Robot::hardwareList, send_frame);
     }
 
 }  // namespace Gimbal

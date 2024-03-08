@@ -17,7 +17,6 @@ namespace Chassis
        public:
         Chassis();
         ~Chassis() = default;
-        void unpack(const can_frame &frame);
         void update_speed();
         void init(const std::shared_ptr<Robot::Robot_set> &robot);
         void decomposition_speed();
@@ -35,7 +34,7 @@ namespace Chassis
 
         bool no_force = true;
 
-        std::shared_ptr<Hardware::Can_interface> can_itrf;
+//        std::shared_ptr<Hardware::Can_interface> can_itrf;
        private:
         // chassis set rotation speed,positive means counterclockwise,unit
         // rad/s.底盘设定旋转角速度，逆时针为正 单位 rad/s

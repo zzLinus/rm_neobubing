@@ -21,6 +21,13 @@ namespace Status
     const bool ERROR = false;
 }  // namespace Status
 
+typedef enum
+{
+    CAN0 = 0,
+    CAN1,
+    SER1,
+} HardwareId;
+
 namespace Types
 {
     typedef struct ReceivePacket

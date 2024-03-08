@@ -17,5 +17,5 @@ file(GLOB_RECURSE SOURCE src/main.cc ./src/*.cc)
 add_executable(${PROJECT_NAME} ${SOURCE})
 
 target_link_directories(${PROJECT_NAME} PUBLIC ./3rdparty/lib)
-target_link_libraries(${PROJECT_NAME} libraylib.a)
+#target_link_libraries(${PROJECT_NAME} libraylib.a)
 target_link_libraries(${PROJECT_NAME} libserial.a)

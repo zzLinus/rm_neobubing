@@ -1,6 +1,9 @@
 #pragma once
 
 #include "types.hpp"
+#include "hardware_list.hpp"
+#include "can.hpp"
+#include "serial_interface.hpp"
 
 namespace Robot
 {
@@ -28,5 +31,9 @@ namespace Robot
         fp32 pitch_relative = 0.f;
         Types::ROBOT_MODE mode = Types::ROBOT_MODE::ROBOT_NO_FORCE;
     };
+
+    using RobotHardware = Hardware::Hardware_list<Hardware::Can_interface, Hardware::Can_interface,
+                                                  Hardware::Serial_interface<Types::ReceivePacket>>;
+    extern std::shared_ptr<RobotHardware> hardwareList;
 }
 

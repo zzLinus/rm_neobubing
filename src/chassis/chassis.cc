@@ -3,23 +3,17 @@
 namespace Chassis
 {
     Chassis::Chassis() {
-        can_itrf = std::make_shared<Hardware::Can_interface>();
         // 电机初始化
         motors.assign(4, Hardware::Motor{ Config::M3508_SPEED_PID_CONFIG });
     }
 
     void Chassis::init(const std::shared_ptr<Robot::Robot_set> &robot) {
-        can_itrf->init([&](auto frame) { unpack(frame); }, "can1");
         robot_set = robot;
-    }
-
-    void Chassis::unpack(const can_frame &frame) {
-        auto &motor_t = motors[frame.can_id - 0x201].motor_measure;
-        motor_t.last_ecd = motor_t.last_ecd;
-        motor_t.ecd = (uint16_t)(frame.data[0] << 8 | frame.data[1]);
-        motor_t.speed_rpm = (uint16_t)(frame.data[2] << 8 | frame.data[3]);
-        motor_t.given_current = (uint16_t)(frame.data[4] << 8 | frame.data[5]);
-        motor_t.temperate = frame.data[6];
+        for(int i = 0; i < motors.size(); i++) {
+            auto & mot = motors[i];
+            Hardware::register_callback<CAN1>(*Robot::hardwareList, 0x201 + i,
+                                              [&mot](const auto &frame){mot.unpack(frame);});
+        }
     }
 
     void Chassis::control_loop() {
@@ -57,7 +51,7 @@ namespace Chassis
             send_frame.data[i * 2] = (motors[i].give_current >> 8);
             send_frame.data[i * 2 + 1] = (motors[i].give_current & 0xff);
         }
-        can_itrf->can_send(send_frame);
+        Hardware::send<CAN1>(*Robot::hardwareList, send_frame);
     }
 
     void Chassis::decomposition_speed() {

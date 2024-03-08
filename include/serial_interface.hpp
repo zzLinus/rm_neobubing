@@ -11,9 +11,12 @@ namespace Hardware
     class Serial_interface : serial::Serial
     {
        public:
-        Serial_interface();
+        using callbackType = std::function<void(int, const T &t)>;
+
+        Serial_interface() = default;
         ~Serial_interface();
         void task();
+        void set_callback(const callbackType &fun);
 
        private:
         inline void enumerate_ports();
@@ -24,23 +27,27 @@ namespace Hardware
         T rp;
 
        private:
+        callbackType callback_fun;
         uint8_t buffer[256];
         uint8_t header;
     };
-
     template<class T>
-    Serial_interface<T>::Serial_interface()
-        : serial::Serial(std::string("/dev/ttyACM0"), 115200, serial::Timeout::simpleTimeout(1000)) {
+    void Serial_interface<T>::set_callback(const Serial_interface::callbackType &fun) {
+        callback_fun = fun;
     }
 
+//    template<class T>
+//    Serial_interface<T>::Serial_interface()
+//        : serial::Serial(std::string("/dev/ttyACM0"), 115200, serial::Timeout::simpleTimeout(1000)) {
+//    }
+
     template<class T>
-    Serial_interface<T>::~Serial_interface() {
-    }
+    Serial_interface<T>::~Serial_interface() = default;
 
     template<class T>
     inline void Serial_interface<T>::enumerate_ports() {
         std::vector<serial::PortInfo> devices_found = serial::list_ports();
-        std::vector<serial::PortInfo>::iterator iter = devices_found.begin();
+        auto iter = devices_found.begin();
 
         while (iter != devices_found.end()) {
             serial::PortInfo device = *iter++;
@@ -59,14 +66,14 @@ namespace Hardware
     inline int Serial_interface<T>::unpack() {
         memcpy(buffer, read(sizeof(T)).c_str(), sizeof(T));
         fromVector(buffer, &rp);
-        LOG_INFO("serial info: %f %f %f %f %f %f\n", rp.yaw, rp.pitch, rp.roll, rp.yaw_v, rp.pitch_v, rp.roll_v);
+        callback_fun(0, rp);
 
         return 0;
     }
 
     template<class T>
     void Serial_interface<T>::task() {
-        while (1) {
+        while (true) {
             if (isOpen()) {
                 read(&header, 1);
                 if (header == 0xAB)

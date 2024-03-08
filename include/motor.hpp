@@ -3,6 +3,7 @@
 
 #include "pid_controller.hpp"
 #include "types.hpp"
+#include "can.hpp"
 
 namespace Hardware
 {
@@ -20,6 +21,7 @@ namespace Hardware
     {
        public:
         explicit Motor(const Pid::Pid_config &config) : pid_ctrler(config) {};
+        void unpack(const can_frame &frame);
         ~Motor() = default;
 
        private:

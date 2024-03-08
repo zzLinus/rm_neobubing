@@ -10,8 +10,7 @@ namespace Hardware
         init_flag = false;
     }
 
-    void Can_interface::init(const CallbackType& callback, const char* can_channel) {
-        callback_fun = callback;
+    void Can_interface::init(const char* can_channel) {
         // create CAN socket
         if ((soket_id = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
             LOG_ERR("Error while creating socket");
@@ -52,7 +51,7 @@ namespace Hardware
         delete ifr;
     }
 
-    bool Can_interface::can_dump() {
+    bool Can_interface::task() {
         for (;;) {
             if (init_flag) {
                 // read CAN frame
@@ -62,15 +61,19 @@ namespace Hardware
                 } else {
                     // printf("not reading!\n");
                 }
-                callback_fun(frame_r);
+                callback_fun(frame_r.can_id, frame_r);
             }
         }
     }
 
-    bool Can_interface::can_send(const can_frame &frame) {
+    bool Can_interface::send(const can_frame &frame) {
         /* send CAN frame */
         write(soket_id, &frame, sizeof(can_frame));
         return true;
+    }
+
+    void Can_interface::set_callback(const Can_interface::CallbackType &callback) {
+        callback_fun = callback;
     }
 
 }  // namespace Hardware

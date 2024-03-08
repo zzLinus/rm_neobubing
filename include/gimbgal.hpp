@@ -19,7 +19,6 @@ namespace Gimbal
         ~Gimbal() = default;
         void init(const std::shared_ptr<Robot::Robot_set>& robot);
         void control_loop();
-        void unpack(const can_frame &frame);
         void update_data();
         void send_motor_current();
         void init_loop();
@@ -38,7 +37,6 @@ namespace Gimbal
         fp32 yaw_gyro = 0.f;
         fp32 pitch_gyro = 0.f;
 
-        std::shared_ptr<Hardware::Can_interface> can_itrf;
         std::shared_ptr<Robot::Robot_set> robot_set;
         Hardware::Motor yaw_motor;
         Hardware::Motor pitch_motor;

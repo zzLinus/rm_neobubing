@@ -22,13 +22,14 @@ namespace Hardware
     class Can_interface
     {
        public:
-        using CallbackType = std::function<void(const can_frame &)>;
+        using CallbackType = std::function<void(uint32_t id, const can_frame &)>;
 
         Can_interface();
         ~Can_interface();
-        bool can_send(const can_frame &frame);
-        bool can_dump();
-        void init(const CallbackType &callback, const char *can_channel);
+        bool send(const can_frame &frame);
+        bool task();
+        void init(const char *can_channel);
+        void set_callback(const CallbackType &callback);
 
        private:
         sockaddr_can *addr;
