@@ -22,6 +22,7 @@ namespace Gimbal
         void update_data();
         void send_motor_current();
         void init_loop();
+        void start_init_loop();
 
        public:
         bool no_force = true;
@@ -31,6 +32,9 @@ namespace Gimbal
 
         fp32 yaw_set = 0.f;
         fp32 pitch_set = 0.f;
+
+        fp32 init_yaw_set = 0.f;
+        fp32 init_pitch_set = 0.f;
 
         fp32 yaw_gyro = 0.f;
         fp32 pitch_gyro = 0.f;

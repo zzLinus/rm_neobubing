@@ -12,32 +12,41 @@ namespace Gimbal
           pitch_relative_pid(Config::GIMBAL_PITCH_RELATIVE_PID_CONFIG) {
     }
 
-    void Gimbal::init(const std::shared_ptr<Robot::Robot_set>& robot) {
+    void Gimbal::init(const std::shared_ptr<Robot::Robot_set> &robot) {
         robot_set = robot;
 
         Robot::hardware->register_callback<CAN0>(
-            0x205, [&](const auto &frame){yaw_motor.unpack(frame);});
+            0x205, [&](const auto &frame) { yaw_motor.unpack(frame); });
         Robot::hardware->register_callback<CAN0>(
-            0x206, [&](const auto &frame){pitch_motor.unpack(frame);});
+            0x206, [&](const auto &frame) { pitch_motor.unpack(frame); });
+    }
+
+    void Gimbal::start_init_loop() {
+        update_data();
+        init_yaw_set = robot_set->yaw_relative;
+        init_pitch_set = robot_set->pitch_relative;
     }
 
     void Gimbal::init_loop() {
         update_data();
-        yaw_relative_pid.calc(robot_set->yaw_relative, 0.f);
+        init_yaw_set += UserLib::rad_format(0.f - robot_set->yaw_relative) * Config::GIMBAL_INIT_YAW_SPEED;
+        init_pitch_set += UserLib::rad_format(0.f - robot_set->pitch_relative) * Config::GIMBAL_INIT_PITCH_SPEED;
+
+        yaw_relative_pid.calc(robot_set->yaw_relative, init_yaw_set);
         yaw_motor.speed_set = yaw_relative_pid.out;
         yaw_motor.pid_ctrler.calc(yaw_gyro, yaw_motor.speed_set);
         yaw_motor.give_current = (int16_t)yaw_motor.pid_ctrler.out;
 
-        pitch_relative_pid.calc(robot_set->pitch_relative, 0.f);
+        pitch_relative_pid.calc(robot_set->pitch_relative, init_pitch_set);
         pitch_motor.speed_set = pitch_relative_pid.out;
         pitch_motor.pid_ctrler.calc(pitch_gyro, pitch_motor.speed_set);
         pitch_motor.give_current = (int16_t)pitch_motor.pid_ctrler.out;
+        std::cout << robot_set->yaw_relative << ' ' << robot_set->pitch_relative << std::endl;
 
-        if(fabs(robot_set->yaw_relative) < Config::GIMBAL_INIT_EXP &&
+        if (fabs(robot_set->yaw_relative) < Config::GIMBAL_INIT_EXP &&
             fabs(robot_set->pitch_relative) < Config::GIMBAL_INIT_EXP) {
-            init_stop_times += 2;
-        }
-        else {
+            init_stop_times += 1;
+        } else {
             init_stop_times = 0;
         }
         inited = init_stop_times >= Config::GIMBAL_INIT_STOP_TIME;

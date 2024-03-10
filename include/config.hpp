@@ -51,7 +51,7 @@ namespace Config
     };
 
     const typename Pid::Pid_config GIMBAL_PITCH_RELATIVE_PID_CONFIG{
-        15.0f,
+        8.0f,
         0.0f,
         0.0f,
         10.0f,
@@ -59,20 +59,23 @@ namespace Config
     };
 
     const typename Pid::Pid_config YAW_SPEED_PID_CONFIG{
-        8200.0f / 2.f,
-        15.0f / 3.f,
-        0.0f,
-        30000.0f / 3.f,
-        5000.0f / 2.f,
+        7000.f,
+        8.0f,
+        0.f,
+        30000.0f,
+        5000.0f,
     };
 
     const typename Pid::Pid_config PITCH_SPEED_PID_CONFIG{
-        8200.0f / 6.f,
-        15.0f / 6.f,
+        8200.0f,
+        15.0f,
         0.0f,
-        30000.0f / 6.f,
-        5000.0f / 6.f,
+        30000.0f,
+        5000.0f,
     };
+
+    constexpr fp32 GIMBAL_INIT_YAW_SPEED = 0.005f;
+    constexpr fp32 GIMBAL_INIT_PITCH_SPEED = 0.004f;
 
     // m3508 rmp change to chassis speed,
     // m3508转化成底盘速度(m/s)的比例，
@@ -81,10 +84,10 @@ namespace Config
     constexpr fp32 RPM_TO_RAD_S = 2.f * M_PIf / 60.f;
     constexpr fp32 CHASSIS_CONTROL_FREQUENCE = 500.0f;
 
-    constexpr fp32 GIMBAL_YAW_OFFSET_ECD = 4200;
+    constexpr fp32 GIMBAL_YAW_OFFSET_ECD = 104;
     constexpr fp32 GIMBAL_PITCH_OFFSET_ECD = 7875;
 
-    constexpr uint32_t GIMBAL_INIT_STOP_TIME = 2000;
+    constexpr uint32_t GIMBAL_INIT_STOP_TIME = 200000;
     constexpr fp32 GIMBAL_INIT_EXP = 0.1f;
 
 }  // namespace Config

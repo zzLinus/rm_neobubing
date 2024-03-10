@@ -69,14 +69,14 @@ namespace Hardware
     inline int Serial_interface<T>::unpack() {
         memcpy(buffer, read(sizeof(T)).c_str(), sizeof(T));
         fromVector(buffer, &rp);
-        LOG_INFO(
-            "serial data : (angle y/p/r) %f %f %f (speed y/p/r) %f %f %f\n",
-            rp.yaw,
-            rp.pitch,
-            rp.roll,
-            rp.yaw_v,
-            rp.pitch_v,
-            rp.roll_v);
+//        LOG_INFO(
+//            "serial data : (angle y/p/r) %f %f %f (speed y/p/r) %f %f %f\n",
+//            rp.yaw,
+//            rp.pitch,
+//            rp.roll,
+//            rp.yaw_v,
+//            rp.pitch_v,
+//            rp.roll_v);
         callback_fun(0, rp);
 
         return 0;
