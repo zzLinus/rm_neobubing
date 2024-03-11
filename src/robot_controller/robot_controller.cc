@@ -25,7 +25,7 @@ namespace Robot
     void Robot_ctrl::start() {
 #warning chassis is closed
         chassis_thread = std::make_unique<std::thread>(&Robot_ctrl::chassis_task, this);
-        // gimbal_thread = std::make_unique<std::thread>(&Robot_ctrl::gimbal_task, this);
+        gimbal_thread = std::make_unique<std::thread>(&Robot_ctrl::gimbal_task, this);
     }
 
     void Robot_ctrl::join() const {
@@ -35,9 +35,9 @@ namespace Robot
         if (chassis_thread != nullptr) {
             chassis_thread->join();
         }
-        // if(gimbal_thread != nullptr) {
-        //     gimbal_thread->join();
-        // }
+         if(gimbal_thread != nullptr) {
+             gimbal_thread->join();
+         }
     }
 
     void Robot_ctrl::chassis_task() {
@@ -100,7 +100,7 @@ namespace Robot
             robot_set->ins_yaw = rp.yaw;
             robot_set->ins_pitch = rp.pitch;
             robot_set->ins_roll = rp.roll;
-            robot_set->ins_yaw_v = -rp.yaw_v;
+            robot_set->ins_yaw_v = rp.yaw_v;
             robot_set->ins_pitch_v = -rp.pitch_v;
             robot_set->ins_roll_v = -rp.roll_v;
         });

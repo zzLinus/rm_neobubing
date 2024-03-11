@@ -24,27 +24,32 @@ namespace Gimbal
     void Gimbal::start_init_loop() {
         update_data();
         init_yaw_set = robot_set->yaw_relative;
-        init_pitch_set = robot_set->pitch_relative;
+        init_pitch_set = robot_set->ins_pitch;
     }
 
     void Gimbal::init_loop() {
         update_data();
         init_yaw_set += UserLib::rad_format(0.f - robot_set->yaw_relative) * Config::GIMBAL_INIT_YAW_SPEED;
-        init_pitch_set += UserLib::rad_format(0.f - robot_set->pitch_relative) * Config::GIMBAL_INIT_PITCH_SPEED;
+        init_pitch_set += UserLib::rad_format(0.f - robot_set->ins_pitch) * Config::GIMBAL_INIT_PITCH_SPEED;
 
         yaw_relative_pid.calc(robot_set->yaw_relative, init_yaw_set);
         yaw_motor.speed_set = yaw_relative_pid.out;
         yaw_motor.pid_ctrler.calc(yaw_gyro, yaw_motor.speed_set);
         yaw_motor.give_current = (int16_t)yaw_motor.pid_ctrler.out;
 
-        pitch_relative_pid.calc(robot_set->pitch_relative, init_pitch_set);
-        pitch_motor.speed_set = pitch_relative_pid.out;
+        pitch_absolute_pid.calc(robot_set->ins_pitch, init_pitch_set);
+        pitch_motor.speed_set = pitch_absolute_pid.out;
         pitch_motor.pid_ctrler.calc(pitch_gyro, pitch_motor.speed_set);
         pitch_motor.give_current = (int16_t)pitch_motor.pid_ctrler.out;
-        std::cout << robot_set->yaw_relative << ' ' << robot_set->pitch_relative << std::endl;
+
+//        pitch_relative_pid.calc(robot_set->pitch_relative, init_pitch_set);
+//        pitch_motor.speed_set = pitch_relative_pid.out;
+//        pitch_motor.pid_ctrler.calc(pitch_gyro, pitch_motor.speed_set);
+//        pitch_motor.give_current = (int16_t)pitch_motor.pid_ctrler.out;
+        std::cout << robot_set->yaw_relative << ' ' << robot_set->ins_pitch << std::endl;
 
         if (fabs(robot_set->yaw_relative) < Config::GIMBAL_INIT_EXP &&
-            fabs(robot_set->pitch_relative) < Config::GIMBAL_INIT_EXP) {
+            fabs(robot_set->ins_pitch) < Config::GIMBAL_INIT_EXP) {
             init_stop_times += 1;
         } else {
             init_stop_times = 0;

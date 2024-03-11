@@ -14,6 +14,9 @@ int main(int argc, char **argv) {
     robot.start_init();
     robot.init_join();
 
+    robot.robot_set->mode = Types::ROBOT_MODE::ROBOT_FOLLOW_GIMBAL;
+    robot.robot_set->yaw_set = robot.robot_set->ins_yaw;
+
     robot.start();
     robot.join();
 

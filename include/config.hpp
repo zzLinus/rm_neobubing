@@ -35,7 +35,7 @@ namespace Config
     };          // MAX_IOUT
 
     const typename Pid::Pid_config GIMBAL_PITCH_ABSOLUTE_PID_CONFIG{
-        15.0f,  // KP
+        12.0f,  // KP
         0.0f,   // KI
         0.0f,   // KD
         10.0f,  // MAX_OUT
@@ -85,9 +85,9 @@ namespace Config
     constexpr fp32 CHASSIS_CONTROL_FREQUENCE = 500.0f;
 
     constexpr fp32 GIMBAL_YAW_OFFSET_ECD = 104;
-    constexpr fp32 GIMBAL_PITCH_OFFSET_ECD = 7875;
+    constexpr fp32 GIMBAL_PITCH_OFFSET_ECD = 8080;
 
-    constexpr uint32_t GIMBAL_INIT_STOP_TIME = 200000;
+    constexpr uint32_t GIMBAL_INIT_STOP_TIME = 1000;
     constexpr fp32 GIMBAL_INIT_EXP = 0.1f;
 
 }  // namespace Config
