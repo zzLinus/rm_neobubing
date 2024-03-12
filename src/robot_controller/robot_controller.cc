@@ -23,7 +23,7 @@ namespace Robot
     }
 
     void Robot_ctrl::start() {
-#warning chassis is closed
+        // #warning chassis is closed
         chassis_thread = std::make_unique<std::thread>(&Robot_ctrl::chassis_task, this);
         gimbal_thread = std::make_unique<std::thread>(&Robot_ctrl::gimbal_task, this);
     }
@@ -35,9 +35,9 @@ namespace Robot
         if (chassis_thread != nullptr) {
             chassis_thread->join();
         }
-         if(gimbal_thread != nullptr) {
-             gimbal_thread->join();
-         }
+        if (gimbal_thread != nullptr) {
+            gimbal_thread->join();
+        }
     }
 
     void Robot_ctrl::chassis_task() {
@@ -90,7 +90,7 @@ namespace Robot
         can1.init("can1");
         socket_intrf = new Io::Server_socket_interface(robot_set);
         try {
-            ser1 = new Hardware::Serial_interface<Types::ReceivePacket>("/dev/ttyACM0", 115200, 1000);
+            ser1 = new Hardware::Serial_interface<Types::ReceivePacket>("/dev/ttyACM1", 115200, 1000);
         } catch (serial::IOException) {
             LOG_ERR("there's no such serial device\n");
         }

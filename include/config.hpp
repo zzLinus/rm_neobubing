@@ -59,9 +59,12 @@ namespace Config
     };
 
     const typename Pid::Pid_config YAW_SPEED_PID_CONFIG{
-        7000.f,
-        8.0f,
-        0.f,
+		4600.f,
+		2.0f,
+		1.f,
+        //7000.f,
+        //8.0f,
+        //0.f,
         30000.0f,
         5000.0f,
     };
