@@ -9,14 +9,14 @@ namespace UserLib
             out = input;
         }
         else {
-            out += input > out ? acc : -acc;
+            out += (input > out ? acc : -acc);
         }
     }
 
-    Ramp::Ramp(fp32 acc, fp32 dt) : acc(acc), dt(dt) { }
+    Ramp::Ramp(fp32 acc, fp32 dt) : acc(acc * dt), dt(dt) { }
 
     void Ramp::setAcc(fp32 acc_t) {
-        this->acc = acc_t;
+        this->acc = acc_t * dt;
     }
 
     void Ramp::clear() {

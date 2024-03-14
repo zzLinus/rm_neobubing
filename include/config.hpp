@@ -80,10 +80,10 @@ namespace Config
 
     /** SHOOT **/
     const typename Pid::Pid_config FRIC_SPEED_PID_CONFIG{
-        15000.0f,  // KP
-        10.0f,     // KI
-        0.0f,      // KD
-        14000.0f,  // MAX_OUT
+        5.f,  // KP
+        0.05f,     // KI
+        10.0f,      // KD
+        16000.0f,  // MAX_OUT
         2000.0f,   // MAX_IOUT
     };
 

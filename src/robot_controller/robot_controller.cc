@@ -107,7 +107,7 @@ namespace Robot
         can1.init("can1");
         socket_intrf = new Io::Server_socket_interface(robot_set);
         try {
-            ser1 = new Hardware::Serial_interface<Types::ReceivePacket>("/dev/ttyACM1", 115200, 1000);
+            ser1 = new Hardware::Serial_interface<Types::ReceivePacket>("/dev/ttyACM0", 115200, 1000);
         } catch (serial::IOException &ex) {
             LOG_ERR("there's no such serial device\n");
         }
@@ -132,5 +132,6 @@ namespace Robot
         });
         chassis.init(robot_set);
         gimbal.init(robot_set);
+        shoot.init(robot_set);
     }
 };  // namespace Robot

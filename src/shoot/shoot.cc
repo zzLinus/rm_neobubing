@@ -52,7 +52,7 @@ namespace Shoot
         frame.data[0] = (friction[0].give_current >> 8);
         frame.data[1] = (friction[0].give_current & 0xff);
         frame.data[2] = (friction[1].give_current >> 8);
-        frame.data[3] = (friction[2].give_current & 0xff);
+        frame.data[3] = (friction[1].give_current & 0xff);
         Robot::hardware->send<CAN0>(frame);
     }
 
@@ -71,6 +71,7 @@ namespace Shoot
                 mot.give_current = (int16_t)mot.pid_ctrler.out;
             }
         }
+        send_motor_current();
     }
 
 }  // namespace Shoot
