@@ -10,12 +10,12 @@ int main(int argc, char **argv) {
     Robot::Robot_ctrl robot;
 
     robot.load_hardware();
-//    robot.start_init();
-//    robot.init_join();
+    robot.start_init();
+    robot.init_join();
 
     robot.robot_set->mode = Types::ROBOT_MODE::ROBOT_NOT_FOLLOW;
 
-//    robot.start();
+    robot.start();
 
     robot.join();
 

@@ -36,7 +36,7 @@ namespace Config
     };
 
     const typename Pid::Pid_config GIMBAL_PITCH_ABSOLUTE_PID_CONFIG{
-        12.0f,  // KP
+        10.0f,  // KP
         0.0f,   // KI
         0.0f,   // KD
         10.0f,  // MAX_OUT
@@ -52,7 +52,7 @@ namespace Config
     };
 
     const typename Pid::Pid_config GIMBAL_PITCH_RELATIVE_PID_CONFIG{
-        8.0f,
+        12.0f,
         0.0f,
         0.0f,
         10.0f,
@@ -63,9 +63,6 @@ namespace Config
 		3200.f,
 		3.0f,
 		2.f,
-        //7000.f,
-        //8.0f,
-        //0.f,
         30000.0f,
         5000.0f,
     };

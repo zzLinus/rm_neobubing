@@ -70,7 +70,6 @@ namespace Hardware
 //            rp.pitch_v,
 //            rp.roll_v);
         this->callback(rp);
-
         return 0;
     }
 

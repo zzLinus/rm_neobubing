@@ -1,9 +1,10 @@
 #pragma once
 
 #include "can.hpp"
+#include "hardware_manager.hpp"
+#include "rc_ctrl.hpp"
 #include "serial_interface.hpp"
 #include "socket_interface.hpp"
-#include "hardware_manager.hpp"
 
 namespace Robot
 {
@@ -11,7 +12,8 @@ namespace Robot
         Hardware::Can_interface,
         Hardware::Can_interface,
         Hardware::Serial_interface<Types::ReceivePacket>,
-        Io::Server_socket_interface>;
+        Io::Server_socket_interface,
+        Io::Rc_ctrl>;
 
     extern std::shared_ptr<RobotHardware> hardware;
-}
+}  // namespace Robot

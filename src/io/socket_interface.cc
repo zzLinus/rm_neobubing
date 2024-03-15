@@ -11,7 +11,7 @@ namespace Io
 
             auto n = recvfrom(sockfd, buffer, 256, MSG_WAITALL, (sockaddr *)&cli_addr, &cli_addr_len);
             if (n > 0) {
-                LOG_OK("reads %lu bytes from client: %s\n", n, buffer);
+                //LOG_OK("reads %lu bytes from client: %s\n", n, buffer);
             }
             uint8_t header = buffer[0];
 

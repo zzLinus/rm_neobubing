@@ -26,7 +26,8 @@ typedef enum
     CAN0 = 0,
     CAN1,
     SER1,
-	SOCKET,
+    SOCKET,
+	RC_CTRL
 } HardwareId;
 
 namespace Types
@@ -39,6 +40,8 @@ namespace Types
         float yaw_v;
         float pitch_v;
         float roll_v;
+        int16_t ch[5];
+        char s[2];
     } __attribute__((packed)) ReceivePacket;
 
     typedef struct

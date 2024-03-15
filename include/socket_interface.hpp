@@ -25,7 +25,6 @@ namespace Io
 
         template<typename T>
         void send(const T &pkg) {
-            LOG_INFO("port num %d\n", cli_addr.sin_port);
             auto n = sendto(
                 sockfd,
                 (const char *)(&pkg),
