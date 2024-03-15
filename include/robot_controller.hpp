@@ -11,6 +11,7 @@
 #include "robot.hpp"
 #include "serial_interface.hpp"
 #include "socket_interface.hpp"
+#include "device/imu.hpp"
 
 namespace Robot
 {
@@ -40,6 +41,8 @@ namespace Robot
 
         Pid::Pid_rad chassis_angle_pid;
         std::shared_ptr<Robot_set> robot_set;
+
+        Device::IMU imu;
         Chassis::Chassis chassis;
         Gimbal::Gimbal gimbal;
         Shoot::Shoot shoot;
@@ -48,7 +51,6 @@ namespace Robot
         Hardware::Can_interface can1;
         Hardware::Serial_interface<Types::ReceivePacket> *ser1;
         Io::Server_socket_interface *socket_intrf;
-
        private:
     };
 

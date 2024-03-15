@@ -1,7 +1,5 @@
 #include "robot_controller.hpp"
 
-#include "can.hpp"
-
 namespace Robot
 {
     Robot_ctrl::Robot_ctrl() : chassis_angle_pid(Config::CHASSIS_FOLLOW_GIMBAL_PID_CONFIG) {
@@ -14,6 +12,7 @@ namespace Robot
     }
 
     void Robot_ctrl::start_init() {
+        imu.init(robot_set);
         chassis.init(robot_set);
         gimbal.init(robot_set);
         shoot.init(robot_set);
@@ -126,26 +125,18 @@ namespace Robot
             LOG_ERR("get receive gimbal packet\n");
         });
 
-        Robot::hardware->register_callback<SOCKET, Robot::ReceiveGimbalPacket>(
-            [&](const auto &pkg) {
-                               LOG_ERR("get receive gimbal packet\n");
-                               LOG_ERR("x: %f, y: %f, z: %f\n", pkg.x, pkg.y, pkg.z);
-                           });
+        Robot::hardware->register_callback<SOCKET, Robot::ReceiveGimbalPacket>([&](const auto &pkg) {
+            LOG_ERR("get receive gimbal packet\n");
+            LOG_ERR("x: %f, y: %f, z: %f\n", pkg.x, pkg.y, pkg.z);
+        });
 
-        Robot::hardware->register_callback<SER1>(
-            [&](const Types::ReceivePacket &rp) {
-            robot_set->ins_yaw = rp.yaw;
-            robot_set->ins_pitch = rp.pitch;
-            robot_set->ins_roll = rp.roll;
-            robot_set->ins_yaw_v = rp.yaw_v;
-            robot_set->ins_pitch_v = -rp.pitch_v;
-            robot_set->ins_roll_v = -rp.roll_v;
+        Robot::hardware->register_callback<SER1>([&](const Types::ReceivePacket &rp) {
+            imu.unpack(rp);
             Robot::SendGimbalPacket pkg;
             pkg.yaw = rp.yaw;
             pkg.pitch = rp.pitch;
             pkg.roll = rp.roll;
             Robot::hardware->send<SOCKET>(pkg);
-//            LOG_INFO("send pkg\n");
         });
     }
 };  // namespace Robot
