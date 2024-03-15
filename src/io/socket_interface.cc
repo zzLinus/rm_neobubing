@@ -1,4 +1,5 @@
 #include "socket_interface.hpp"
+#include "user_lib.hpp"
 
 #include <chrono>
 #include <thread>

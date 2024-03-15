@@ -12,6 +12,7 @@ namespace Hardware
     //    }
 
     void Motor::unpack(const can_frame& frame) {
+        update_time();
         auto& motor_t = motor_measure;
         motor_t.last_ecd = motor_t.last_ecd;
         motor_t.ecd = (uint16_t)(frame.data[0] << 8 | frame.data[1]);

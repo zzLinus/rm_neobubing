@@ -12,6 +12,7 @@
 #include "arpa/inet.h"
 #include "robot.hpp"
 #include "utils.hpp"
+#include "hardware_callback.hpp"
 
 namespace Io
 {

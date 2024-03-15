@@ -1,9 +1,5 @@
 #ifndef __ROBOT__
 #define __ROBOT__
-#include "can.hpp"
-#include "hardware_manager.hpp"
-#include "memory"
-#include "serial_interface.hpp"
 #include "types.hpp"
 
 namespace Robot

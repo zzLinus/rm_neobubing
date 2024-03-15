@@ -4,6 +4,7 @@
 #include "pid_controller.hpp"
 #include "types.hpp"
 #include "can.hpp"
+#include "device/deviece_base.hpp"
 
 namespace Hardware
 {
@@ -17,7 +18,7 @@ namespace Hardware
         int16_t last_ecd = 0;
     };
 
-    class Motor
+    class Motor : public Device::DeviceBase
     {
        public:
         explicit Motor(const Pid::Pid_config &config) : pid_ctrler(config) {};

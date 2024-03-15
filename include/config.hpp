@@ -117,4 +117,6 @@ namespace Config
     constexpr uint32_t GIMBAL_CONTROL_TIME = 1;
     constexpr uint32_t SHOOT_CONTROL_TIME = 1;
 
+    constexpr uint32_t DEFAULT_OFFLINE_TIME = 100;
+
 }  // namespace Config
