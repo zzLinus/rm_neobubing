@@ -50,7 +50,7 @@ namespace Robot
     } __attribute__((packed));
 
     // send gimbal package header = 0x5A;
-    struct SendGimbalPacket
+    struct ReceiveGimbalPacket
     {
         /*      自瞄部分     */
         uint8_t header;
@@ -71,6 +71,21 @@ namespace Robot
         float dz;
         /*  决策部分   */
 
+    } __attribute__((packed));
+
+    struct SendGimbalPacket
+    {
+        uint8_t detect_color = 1;
+        bool reset_tracker = false;
+        uint8_t reserved = 0;
+
+        fp32 roll;
+        fp32 pitch;
+        fp32 yaw;
+
+        fp32 aim_x;
+        fp32 aim_y;
+        fp32 aim_z;
     } __attribute__((packed));
 
     // send twist package heaedr = 0x6A;

@@ -9,46 +9,39 @@ namespace Io
         while (true) {
             memset(buffer, 0, sizeof(buffer));
 
-            int n = recvfrom(sockfd, buffer, 256, MSG_WAITALL, (sockaddr *)&cli_addr, &cli_addr_len);
+            auto n = recvfrom(sockfd, buffer, 256, MSG_WAITALL, (sockaddr *)&cli_addr, &cli_addr_len);
             if (n > 0) {
-				LOG_OK("reads %d bytes from client: %s\n", n, buffer);
+                LOG_OK("reads %lu bytes from client: %s\n", n, buffer);
             }
             uint8_t header = buffer[0];
 
             // TODO: send "real" info back to vision ros socket
-            n = sendto(
-                sockfd,
-                (const char *)"Server got your message",
-                strlen("Server got your message"),
-                MSG_CONFIRM,
-                (const struct sockaddr *)&cli_addr,
-                cli_addr_len);
-            if (n > 0) {
-                // LOG_OK("%d bytes send to client: %s\n", n, buffer);
-            }
 
             switch (header) {
-                case 0xEA: {
-                    Robot::Vison_control vc;
-                    UserLib::unpack(vc, buffer);
-                    callback(vc);
+                case 0x5A: {
+                    Robot::ReceiveGimbalPacket pkg{};
+                    UserLib::unpack(pkg, buffer);
+                    callback(pkg);
                     break;
                 }
-                case 0x5A: break;  // TODO:
                 case 0x6A: {
                     Robot::Vison_control vc;
                     UserLib::unpack(vc, buffer);
                     callback(vc);
                     break;
                 }
-                default:;
+                default: {
+                    LOG_ERR("get error flag: %02x\n", header);
+                    Robot::ReceiveGimbalPacket pkg{};
+                    UserLib::unpack(pkg, buffer);
+                    break;
+                }
             }
         }
     }
 
-    Server_socket_interface::Server_socket_interface(std::shared_ptr<Robot::Robot_set> robot_set)
-        : port_num(51718),
-          p_robot_set(robot_set) {
+    Server_socket_interface::Server_socket_interface()
+        : port_num(51718) {
         // NOTE: read this https://www.linuxhowtos.org/C_C++/socket.htm
         sockfd = socket(AF_INET, SOCK_DGRAM, 0);
         if (sockfd < 0) {

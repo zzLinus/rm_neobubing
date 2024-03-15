@@ -60,10 +60,9 @@ namespace Shoot
         update_speed();
         decomposition_speed();
         if (no_force) {
-            friction[0].give_current = 0;
-            friction[1].give_current = 0;
-            friction[2].give_current = 0;
-            friction[3].give_current = 0;
+            for(auto & mot : friction) {
+                mot.give_current = 0;
+            }
         } else {
             decomposition_speed();
             for (auto &mot : friction) {

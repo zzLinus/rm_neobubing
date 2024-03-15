@@ -1,4 +1,5 @@
 #include <cmath>
+#include <vector>
 
 #include "types.hpp"
 
@@ -11,6 +12,15 @@ namespace UserLib
         for (size_t i = 0; i < sizeof(T); i++) {
             *((uint8_t *)&t + i) = *((uint8_t *)ptr + i);
         }
+    }
+
+    template<typename T>
+    std::vector<uint8_t> toVector(T &t) {
+        std::vector<uint8_t> ans;
+        for (size_t i = 0; i < sizeof(T); i++) {
+            ans.push_back(*((uint8_t *)&t + i));
+        }
+        return ans;
     }
 
     class RealRad

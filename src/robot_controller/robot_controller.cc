@@ -14,6 +14,9 @@ namespace Robot
     }
 
     void Robot_ctrl::start_init() {
+        chassis.init(robot_set);
+        gimbal.init(robot_set);
+        shoot.init(robot_set);
         gimbal_init_thread = std::make_unique<std::thread>(&Robot_ctrl::gimbal_init_task, this);
     }
 
@@ -105,7 +108,7 @@ namespace Robot
     void Robot_ctrl::load_hardware() {
         can0.init("can0");
         can1.init("can1");
-        socket_intrf = new Io::Server_socket_interface(robot_set);
+        socket_intrf = new Io::Server_socket_interface();
         try {
             ser1 = new Hardware::Serial_interface<Types::ReceivePacket>("/dev/ttyACM0", 115200, 1000);
         } catch (serial::IOException &ex) {
@@ -114,24 +117,35 @@ namespace Robot
 
         hardware = std::make_shared<RobotHardware>(can0, can1, *ser1, *socket_intrf);
 
-        Robot::hardware->register_callback<SOCKET>([&](const Robot::Vison_control &vc) {
+        Robot::hardware->register_callback<SOCKET, Robot::Vison_control>([&](const Robot::Vison_control &vc) {
             LOG_INFO(" %f %f %f %f\n", vc.linear_vx, vc.linear_vy, vc.angular, vc.yaw_set);
             robot_set->vx_set = vc.linear_vx;
             robot_set->vy_set = vc.linear_vy;
             robot_set->wz_set = vc.angular;
             robot_set->yaw_set = vc.yaw_set;
+            LOG_ERR("get receive gimbal packet\n");
         });
 
-        Robot::hardware->register_callback<SER1>([&](const Types::ReceivePacket &rp) {
+        Robot::hardware->register_callback<SOCKET, Robot::ReceiveGimbalPacket>(
+            [&](const auto &pkg) {
+                               LOG_ERR("get receive gimbal packet\n");
+                               LOG_ERR("x: %f, y: %f, z: %f\n", pkg.x, pkg.y, pkg.z);
+                           });
+
+        Robot::hardware->register_callback<SER1>(
+            [&](const Types::ReceivePacket &rp) {
             robot_set->ins_yaw = rp.yaw;
             robot_set->ins_pitch = rp.pitch;
             robot_set->ins_roll = rp.roll;
             robot_set->ins_yaw_v = rp.yaw_v;
             robot_set->ins_pitch_v = -rp.pitch_v;
             robot_set->ins_roll_v = -rp.roll_v;
+            Robot::SendGimbalPacket pkg;
+            pkg.yaw = rp.yaw;
+            pkg.pitch = rp.pitch;
+            pkg.roll = rp.roll;
+            Robot::hardware->send<SOCKET>(pkg);
+//            LOG_INFO("send pkg\n");
         });
-        chassis.init(robot_set);
-        gimbal.init(robot_set);
-        shoot.init(robot_set);
     }
 };  // namespace Robot

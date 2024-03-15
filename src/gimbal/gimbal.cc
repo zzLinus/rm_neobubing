@@ -27,7 +27,7 @@ namespace Gimbal
 
     void Gimbal::init_loop() {
         update_data();
-        LOG_INFO("init loop\n");
+//        LOG_INFO("init loop\n");
         init_yaw_set += UserLib::rad_format(0.f - robot_set->yaw_relative) * Config::GIMBAL_INIT_YAW_SPEED;
         init_pitch_set += UserLib::rad_format(0.f - robot_set->ins_pitch) * Config::GIMBAL_INIT_PITCH_SPEED;
         init_yaw_set = std::clamp(init_yaw_set, -0.1f, 0.1f);
