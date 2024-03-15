@@ -123,7 +123,6 @@ namespace Robot
             robot_set->vy_set = vc.linear_vy;
             robot_set->wz_set = vc.angular;
             robot_set->yaw_set = vc.yaw_set;
-            LOG_ERR("get receive gimbal packet\n");
         });
 
         Robot::hardware->register_callback<SOCKET, Robot::ReceiveGimbalPacket>(

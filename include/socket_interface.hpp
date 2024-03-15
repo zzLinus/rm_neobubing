@@ -25,9 +25,7 @@ namespace Io
 
         template<typename T>
         void send(const T &pkg) {
-            cli_addr.sin_family = AF_INET;
-            cli_addr.sin_addr.s_addr = inet_addr("192.168.123.147");
-            cli_addr.sin_port = htons(port_num);
+            LOG_INFO("port num %d\n", cli_addr.sin_port);
             auto n = sendto(
                 sockfd,
                 (const char *)(&pkg),
@@ -36,23 +34,18 @@ namespace Io
                 (const struct sockaddr *)&cli_addr,
                 sizeof(cli_addr));
 
-//            LOG_OK("%lu bytes send to client\n", n);
+            //            LOG_OK("%lu bytes send to client\n", n);
         }
 
         void send(const std::string &str) {
-            cli_addr.sin_family = AF_INET;
-            cli_addr.sin_addr.s_addr = inet_addr("192.168.123.147");
-            cli_addr.sin_port = htons(port_num);
-            auto n = sendto(sockfd, str.c_str(), str.size(), MSG_CONFIRM, (const struct sockaddr *)&cli_addr, cli_addr_len);
-//            LOG_OK("%lu bytes send to client\n", n);
+            auto n =
+                sendto(sockfd, str.c_str(), str.size(), MSG_CONFIRM, (const struct sockaddr *)&cli_addr, cli_addr_len);
+            //            LOG_OK("%lu bytes send to client\n", n);
         }
 
         void send(const char *str) {
-            cli_addr.sin_family = AF_INET;
-            cli_addr.sin_addr.s_addr = inet_addr("192.168.123.147");
-            cli_addr.sin_port = htons(port_num);
             auto n = sendto(sockfd, str, strlen(str), MSG_CONFIRM, (const struct sockaddr *)&cli_addr, cli_addr_len);
-//            LOG_OK("%lu bytes send to client\n", n);
+            //            LOG_OK("%lu bytes send to client\n", n);
         }
 
        private:
