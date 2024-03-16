@@ -10,13 +10,13 @@ int main(int argc, char **argv) {
     Robot::Robot_ctrl robot;
 
     robot.load_hardware();
-//    robot.start_init();
-//    robot.init_join();
+    robot.start_init();
+    robot.init_join();
 
     robot.robot_set->mode = Types::ROBOT_MODE::ROBOT_NOT_FOLLOW;
+    robot.robot_set->yaw_set = robot.robot_set->ins_roll;
 
-//    robot.start();
-
+    robot.start();
     robot.join();
 
     return 0;

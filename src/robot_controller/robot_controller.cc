@@ -4,7 +4,6 @@ namespace Robot
 {
     Robot_ctrl::Robot_ctrl() : chassis_angle_pid(Config::CHASSIS_FOLLOW_GIMBAL_PID_CONFIG) {
         robot_set = std::make_shared<Robot_set>();
-        robot_set->yaw_set = -0.7;
     }
 
     Robot_ctrl::~Robot_ctrl() {
@@ -16,6 +15,9 @@ namespace Robot
         chassis.init(robot_set);
         gimbal.init(robot_set);
         shoot.init(robot_set);
+        while(imu.offline()) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(2));
+        }
         gimbal_init_thread = std::make_unique<std::thread>(&Robot_ctrl::gimbal_init_task, this);
     }
 
@@ -115,28 +117,5 @@ namespace Robot
         }
 
         hardware = std::make_shared<RobotHardware>(can0, can1, *ser1, *socket_intrf);
-
-        Robot::hardware->register_callback<SOCKET, Robot::Vison_control>([&](const Robot::Vison_control &vc) {
-            LOG_INFO(" %f %f %f %f\n", vc.linear_vx, vc.linear_vy, vc.angular, vc.yaw_set);
-            robot_set->vx_set = vc.linear_vx;
-            robot_set->vy_set = vc.linear_vy;
-            robot_set->wz_set = vc.angular;
-            robot_set->yaw_set = vc.yaw_set;
-            LOG_ERR("get receive gimbal packet\n");
-        });
-
-        Robot::hardware->register_callback<SOCKET, Robot::ReceiveGimbalPacket>([&](const auto &pkg) {
-            LOG_ERR("get receive gimbal packet\n");
-            LOG_ERR("x: %f, y: %f, z: %f\n", pkg.x, pkg.y, pkg.z);
-        });
-
-        Robot::hardware->register_callback<SER1>([&](const Types::ReceivePacket &rp) {
-            imu.unpack(rp);
-            Robot::SendGimbalPacket pkg;
-            pkg.yaw = rp.yaw;
-            pkg.pitch = rp.pitch;
-            pkg.roll = rp.roll;
-            Robot::hardware->send<SOCKET>(pkg);
-        });
     }
 };  // namespace Robot

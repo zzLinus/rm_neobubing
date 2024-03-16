@@ -13,7 +13,7 @@ namespace Device
     }
 
     bool DeviceBase::offline() {
-        return duration_cast<milliseconds>(system_clock::now() - last_time).count() < offline_time;
+        return duration_cast<milliseconds>(system_clock::now() - last_time).count() >= offline_time;
     }
 
     void DeviceBase::update_time() {
