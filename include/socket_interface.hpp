@@ -28,9 +28,10 @@ namespace Io
         template<typename T>
         void send(const T &pkg) {
             auto it = connections.find(*(uint8_t *)&pkg);
-            if (it == connections.end()) {
+            if (clients.count(it->second) == 0) {
                 LOG_ERR("error connections %x to %x\n", *(uint8_t *)&pkg, it->second);
             } else {
+                LOG_OK("Good connection %x to %x\n", *(uint8_t *)&pkg, it->second);
                 auto n = sendto(
                     sockfd,
                     (const char *)(&pkg),
