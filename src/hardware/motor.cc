@@ -2,6 +2,7 @@
 
 namespace Hardware
 {
+
     void Motor::unpack(const can_frame& frame) {
         update_time();
         auto& motor_t = motor_measure;
